@@ -221,7 +221,7 @@
           </div>
 
           <!-- 4. Policy-driven authorization across service boundaries -->
-          <div class="viz__slide" role="group" aria-label="Authorization" hidden data-caption="Service-to-service authorization across microservices: every request clears Authentication, Policy Engine and Maker-Checker over gRPC">
+          <div class="viz__slide" role="group" aria-label="Authorization" hidden data-caption="Policy-driven authorization across microservices: every request clears authentication, policy evaluation and dual approval over gRPC">
             <svg viewBox="0 0 400 268" focusable="false" aria-hidden="true">
               <!-- A gauntlet, not a fan: these are sequential checks, so the
                    request descends one straight line and the hops land on an
@@ -242,22 +242,22 @@
                 <rect x="80" y="12" width="156" height="32" rx="7" /><text x="158" y="32">request</text>
               </g>
               <g class="v-node v-node--hit" style="--i:1; --t:1.25s">
-                <rect x="80" y="66" width="156" height="32" rx="7" /><text x="158" y="86">Authentication</text>
+                <rect x="80" y="66" width="156" height="32" rx="7" /><text x="158" y="86">authenticate</text>
               </g>
               <g class="v-node v-node--hit" style="--i:2; --t:2.5s">
-                <rect x="80" y="120" width="156" height="32" rx="7" /><text x="158" y="140">Policy Engine</text>
+                <rect x="80" y="120" width="156" height="32" rx="7" /><text x="158" y="140">authorize</text>
               </g>
               <g class="v-node v-node--hit" style="--i:3; --t:3.75s">
-                <rect x="80" y="174" width="156" height="32" rx="7" /><text x="158" y="194">Maker-Checker</text>
+                <rect x="80" y="174" width="156" height="32" rx="7" /><text x="158" y="194">dual approval</text>
               </g>
               <g class="v-node v-node--op v-node--end" style="--i:4">
                 <rect x="80" y="228" width="156" height="32" rx="7" /><text x="158" y="248">allow / deny</text>
               </g>
 
               <text class="v-tag v-tag--left" x="170" y="59">gRPC</text>
-              <text class="v-side" x="252" y="89">identity</text>
-              <text class="v-side" x="252" y="143">rules</text>
-              <text class="v-side" x="252" y="197">approval</text>
+              <text class="v-side" x="252" y="89">who you are</text>
+              <text class="v-side" x="252" y="143">what is allowed</text>
+              <text class="v-side" x="252" y="197">four-eyes</text>
             </svg>
           </div>
         </div>
@@ -362,10 +362,10 @@
             <ul class="bullets">
               <li>Removed lock contention from the write path, replacing counter tables and pessimistic locking with PostgreSQL sequences and optimistic inserts: <strong>4×</strong> sequential and <strong>2.5×</strong> random ID-generation throughput under load.</li>
               <li>Evolved a versioned ClickHouse query engine from flat AND-only filters to an AST model with nested boolean expressions, holding backward compatibility for every existing service client.</li>
-              <li>Integrated Maker-Checker, Authentication and Policy Engine across service boundaries, so authorization is policy-driven and enforced on every gRPC call.</li>
-              <li>Built the Authentication service's management surface: APIs for user lifecycle, per-user role assignment, role-mapping and user-data queries, and Keycloak theme configuration.</li>
+              <li>Integrated authentication, policy evaluation and dual-approval services across service boundaries, so authorization is policy-driven and enforced on every gRPC call.</li>
+              <li>Built an identity service's management surface: APIs for user lifecycle, per-user role assignment, role-mapping and user-data queries, and Keycloak theme configuration.</li>
               <li>Extended the bulk import service with asynchronous processing, moving large data loads off the request path.</li>
-              <li>Tuned PostgreSQL indexes and queries on a hot read path, eliminating sequential scans from OTP configuration lookups.</li>
+              <li>Tuned PostgreSQL indexes and queries on a hot configuration lookup path, eliminating sequential scans.</li>
             </ul>
             <ul class="tags">
               <li>Java</li><li>Distributed systems</li><li>Microservices</li><li>gRPC</li><li>REST APIs</li><li>Keycloak</li><li>PostgreSQL</li><li>ClickHouse</li>
