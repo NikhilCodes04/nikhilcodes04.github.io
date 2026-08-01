@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)" />
+  <title>Nikhil Mittal | Backend &amp; AI Engineer</title>
+  <meta name="description" content="Backend and AI engineer. Distributed services, query engines, and LLM systems: RAG, agents, inference pipelines. Java, Spring Boot, PostgreSQL, ClickHouse, gRPC, OpenAI." />
+  <meta name="author" content="Nikhil Mittal" />
+  <meta name="keywords" content="AI engineer, LLM engineer, AI agents, agentic workflows, RAG, retrieval-augmented generation, vector search, embeddings, function calling, backend engineer, LLM orchestration, prompt engineering, inference pipelines, OpenAI API, generative AI, STT, TTS, speech pipelines, Java, Spring Boot, microservices, gRPC, Kafka, Kubernetes, PostgreSQL, ClickHouse, MongoDB, Redis, Docker, Python, distributed systems, API design" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Nikhil Mittal | Backend &amp; AI Engineer" />
+  <meta property="og:description" content="Backend and AI engineer. Distributed services, query engines, and LLM systems: RAG, agents, inference pipelines." />
+  <meta property="og:image" content="img/og.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" href="img/og.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ambient background -->
+  <div class="glow" aria-hidden="true"></div>
+
+
+  <!-- nav -->
+  <header class="nav" id="nav">
+    <a href="#top" class="nav__mark">nikhil mittal</a>
+    <nav class="nav__links">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#work">Work</a>
+      <a href="#stack">Stack</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav__actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle color theme">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+        </svg>
+      </button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- mobile menu -->
+  <div class="menu" id="mobileMenu" hidden>
+    <nav class="menu__links">
+      <a href="#about"><span class="menu__branch" aria-hidden="true"></span>About</a>
+      <a href="#experience"><span class="menu__branch" aria-hidden="true"></span>Experience</a>
+      <a href="#work"><span class="menu__branch" aria-hidden="true"></span>Work</a>
+      <a href="#stack"><span class="menu__branch" aria-hidden="true"></span>Stack</a>
+      <a href="#contact"><span class="menu__branch" aria-hidden="true"></span>Contact</a>
+    </nav>
+    <div class="menu__foot">
+      <a href="mailto:nikhilmittal2004@gmail.com">Email</a>
+      <a href="https://github.com/nikhilcodes04" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://linkedin.com/in/nikhilmittal11" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="Nikhil_Mittal_Resume.pdf" target="_blank" rel="noopener">Résumé</a>
+    </div>
+  </div>
+
+  <main id="top">
+
+    <!-- ─────────────── HERO ─────────────── -->
+    <section class="hero">
+     <div class="hero__lead">
+      <h1 class="hero__title">
+        <span class="line"><span>Nikhil</span></span>
+        <span class="line"><span>Mittal</span></span>
+      </h1>
+
+      <p class="hero__lede reveal" data-delay="140">
+        Backend and AI engineer. I build the distributed services that move
+        data fast, and the LLM systems that make sense of it: RAG, agents,
+        inference pipelines.
+      </p>
+
+      <!-- the page's signature: his work, printed the way a query plan is -->
+      <dl class="plan reveal" data-delay="260">
+        <div class="plan__row">
+          <dt>role</dt>
+          <dd>SDE Intern, distributed systems <span class="plan__dim">SwiffyLabs, Bengaluru</span></dd>
+        </div>
+        <div class="plan__row">
+          <dt>backend</dt>
+          <dd>ClickHouse query engine, flat filters <span class="plan__to">to</span> nested AST</dd>
+        </div>
+        <div class="plan__row">
+          <dt>ai</dt>
+          <dd>LLM pipelines at Samsung PRISM, a voice assistant on OpenAI <span class="plan__to">+</span> STT/TTS</dd>
+        </div>
+        <div class="plan__row">
+          <dt>impact</dt>
+          <dd><span class="plan__metric">4&times;</span> ID-generation throughput under load</dd>
+        </div>
+      </dl>
+
+      <div class="hero__actions reveal" data-delay="380">
+        <a class="btn btn--solid" href="#work">View work</a>
+        <a class="btn btn--ghost" href="Nikhil_Mittal_Resume.pdf" target="_blank" rel="noopener">Résumé <span class="arrow">↗</span></a>
+      </div>
+     </div>
+
+      <!-- Four systems from the resume, drawn. Not decoration: each slide is a
+           structure he actually built, so the hero shows work instead of
+           describing it. Tree = structure, the rest = flow. -->
+      <figure class="viz" id="viz">
+        <div class="viz__stage">
+
+          <!-- 1. ClickHouse: flat AND-only filters, rebuilt as a nested AST -->
+          <div class="viz__slide is-active" role="group" aria-label="Query AST" data-caption="ClickHouse query engine: flat ANDs rebuilt as a nested boolean AST, without breaking existing clients">
+            <svg viewBox="0 0 400 268" focusable="false" aria-hidden="true">
+              <g class="v-edge v-edge--draw">
+                <path d="M200 52 V84 H104 V116" />
+                <path d="M200 52 V84 H296 V116" />
+                <path d="M104 148 V180 H56 V212" />
+                <path d="M104 148 V180 H152 V212" />
+                <path d="M296 148 V180 H248 V212" />
+                <path d="M296 148 V180 H344 V212" />
+              </g>
+              <!-- A tree is not a flow, so nothing travels here. It resolves
+                   the way a boolean AST actually does: predicates first, then
+                   their operators, then the root. The per-node delay is
+                   evaluation order. -->
+              <g class="v-node v-node--op v-node--pulse" style="--i:0; --t:3.4s">
+                <rect x="168" y="20" width="64" height="32" rx="7" /><text x="200" y="40">OR</text>
+              </g>
+              <g class="v-node v-node--op v-node--pulse" style="--i:1; --t:2.3s">
+                <rect x="69" y="116" width="70" height="32" rx="7" /><text x="104" y="136">AND</text>
+              </g>
+              <g class="v-node v-node--op v-node--pulse" style="--i:2; --t:2.6s">
+                <rect x="261" y="116" width="70" height="32" rx="7" /><text x="296" y="136">AND</text>
+              </g>
+              <g class="v-node v-node--hit" style="--i:3; --t:0.6s">
+                <rect x="12" y="212" width="88" height="32" rx="7" /><text x="56" y="232">status = ok</text>
+              </g>
+              <g class="v-node v-node--hit" style="--i:4; --t:0.9s">
+                <rect x="108" y="212" width="88" height="32" rx="7" /><text x="152" y="232">region = apac</text>
+              </g>
+              <g class="v-node v-node--hit" style="--i:5; --t:1.2s">
+                <rect x="204" y="212" width="88" height="32" rx="7" /><text x="248" y="232">p95 &lt; 200ms</text>
+              </g>
+              <g class="v-node v-node--hit" style="--i:6; --t:1.5s">
+                <rect x="300" y="212" width="88" height="32" rx="7" /><text x="344" y="232">tier &gt;= 2</text>
+              </g>
+            </svg>
+          </div>
+
+          <!-- 2. Aayu Mitra: the voice loop -->
+          <div class="viz__slide" role="group" aria-label="LLM voice pipeline" hidden data-caption="Aayu Mitra: LLM orchestrated with speech-to-text and TTS, multilingual prompts with fallback logic">
+            <svg viewBox="0 0 400 268" focusable="false" aria-hidden="true">
+              <g class="v-edge v-edge--flow">
+                <path d="M66 109 H78" /><path d="M144 109 H156" />
+                <path d="M232 109 H244" /><path d="M310 109 H322" />
+                <path d="M194 60 V92" /><path d="M194 126 V186" />
+              </g>
+              <!-- one utterance making the round trip -->
+              <circle class="v-packet v-packet--llm" cx="35" cy="109" r="5" />
+
+              <g class="v-node v-node--hit" style="--i:0; --t:0s">
+                <rect x="4" y="92" width="62" height="34" rx="7" /><text x="35" y="113">voice</text>
+              </g>
+              <g class="v-node v-node--hit" style="--i:1; --t:1.19s">
+                <rect x="78" y="92" width="66" height="34" rx="7" /><text x="111" y="113">STT</text>
+              </g>
+              <g class="v-node v-node--op v-node--pulse" style="--i:2; --t:2.5s">
+                <rect x="156" y="92" width="76" height="34" rx="7" /><text x="194" y="113">LLM</text>
+              </g>
+              <g class="v-node v-node--hit" style="--i:3; --t:3.8s">
+                <rect x="244" y="92" width="66" height="34" rx="7" /><text x="277" y="113">TTS</text>
+              </g>
+              <g class="v-node v-node--hit" style="--i:4; --t:4.95s">
+                <rect x="322" y="92" width="62" height="34" rx="7" /><text x="353" y="113">voice</text>
+              </g>
+              <!-- both feed the model on the same beat the packet reaches it -->
+              <g class="v-node v-node--hit" style="--i:5; --t:2.5s">
+                <rect x="130" y="28" width="128" height="32" rx="7" /><text x="194" y="48">prompt + intent</text>
+              </g>
+              <g class="v-node v-node--hit" style="--i:6; --t:2.5s">
+                <rect x="140" y="186" width="108" height="32" rx="7" /><text x="194" y="206">session state</text>
+              </g>
+              <text class="v-tag" x="194" y="242">Firestore keeps the thread across days</text>
+            </svg>
+          </div>
+
+          <!-- 3. PostgreSQL: pessimistic locking replaced by sequences -->
+          <div class="viz__slide" role="group" aria-label="Throughput" hidden data-caption="ID generation: sequences and optimistic inserts replaced pessimistic locking, 4&#215; sequential throughput under load">
+            <svg viewBox="0 0 400 268" focusable="false" aria-hidden="true">
+              <text class="v-tag v-tag--left" x="6" y="66">before</text>
+              <text class="v-lane" x="6" y="84">counter table</text>
+              <text class="v-lane" x="6" y="98">+ row lock</text>
+              <g class="v-edge"><path d="M132 92 H384" /></g>
+              <g class="v-gate"><rect x="240" y="76" width="14" height="32" rx="3" /></g>
+              <g class="v-pip v-pip--serial">
+                <circle cx="140" cy="92" r="5" style="--i:0" />
+                <circle cx="140" cy="92" r="5" style="--i:1" />
+                <circle cx="140" cy="92" r="5" style="--i:2" />
+              </g>
+
+              <text class="v-tag v-tag--left v-tag--on" x="6" y="182">after</text>
+              <text class="v-lane" x="6" y="200">sequence</text>
+              <text class="v-lane" x="6" y="214">+ optimistic insert</text>
+              <g class="v-edge"><path d="M132 208 H384" /></g>
+              <g class="v-pip v-pip--parallel">
+                <circle cx="140" cy="208" r="5" style="--i:0" />
+                <circle cx="140" cy="208" r="5" style="--i:1" />
+                <circle cx="140" cy="208" r="5" style="--i:2" />
+                <circle cx="140" cy="208" r="5" style="--i:3" />
+              </g>
+
+              <text class="v-metric" x="384" y="150">4&#215;</text>
+            </svg>
+          </div>
+
+          <!-- 4. Policy-driven authorization across service boundaries -->
+          <div class="viz__slide" role="group" aria-label="Authorization" hidden data-caption="Service-to-service authorization across microservices: every request clears Authentication, Policy Engine and Maker-Checker over gRPC">
+            <svg viewBox="0 0 400 268" focusable="false" aria-hidden="true">
+              <!-- A gauntlet, not a fan: these are sequential checks, so the
+                   request descends one straight line and the hops land on an
+                   even beat. -->
+              <g class="v-edge v-edge--flow">
+                <path d="M158 44 V66" />
+                <path d="M158 98 V120" />
+                <path d="M158 152 V174" />
+                <path d="M158 206 V228" />
+              </g>
+
+              <!-- the request itself. Drawn before the modules so their opaque
+                   bodies occlude it: it enters a service and comes out the far
+                   side, rather than sliding over the top of everything. -->
+              <circle class="v-packet v-packet--authz" cx="158" cy="28" r="5" />
+
+              <g class="v-node" style="--i:0">
+                <rect x="80" y="12" width="156" height="32" rx="7" /><text x="158" y="32">request</text>
+              </g>
+              <g class="v-node v-node--hit" style="--i:1; --t:1.25s">
+                <rect x="80" y="66" width="156" height="32" rx="7" /><text x="158" y="86">Authentication</text>
+              </g>
+              <g class="v-node v-node--hit" style="--i:2; --t:2.5s">
+                <rect x="80" y="120" width="156" height="32" rx="7" /><text x="158" y="140">Policy Engine</text>
+              </g>
+              <g class="v-node v-node--hit" style="--i:3; --t:3.75s">
+                <rect x="80" y="174" width="156" height="32" rx="7" /><text x="158" y="194">Maker-Checker</text>
+              </g>
+              <g class="v-node v-node--op v-node--end" style="--i:4">
+                <rect x="80" y="228" width="156" height="32" rx="7" /><text x="158" y="248">allow / deny</text>
+              </g>
+
+              <text class="v-tag v-tag--left" x="170" y="59">gRPC</text>
+              <text class="v-side" x="252" y="89">identity</text>
+              <text class="v-side" x="252" y="143">rules</text>
+              <text class="v-side" x="252" y="197">approval</text>
+            </svg>
+          </div>
+        </div>
+
+        <figcaption class="viz__caption" id="vizCaption"></figcaption>
+
+        <div class="viz__tabs" role="tablist" aria-label="Diagrams">
+          <button class="viz__tab is-active" role="tab" aria-selected="true" type="button">query ast</button>
+          <button class="viz__tab" role="tab" aria-selected="false" type="button">llm pipeline</button>
+          <button class="viz__tab" role="tab" aria-selected="false" type="button">throughput</button>
+          <button class="viz__tab" role="tab" aria-selected="false" type="button">authorization</button>
+        </div>
+      </figure>
+    </section>
+
+    <!-- ─────────────── ABOUT ─────────────── -->
+    <section class="section" id="about">
+      <div class="section__head reveal">
+        <span class="section__label">in short</span>
+        <h2 class="section__title">About</h2>
+      </div>
+
+      <div class="about">
+        <div class="about__body reveal" data-delay="120">
+          <p>
+            I'm a backend-leaning full-stack engineer. Most of my time goes into
+            the parts users never see: schema design, query plans, service
+            boundaries.
+          </p>
+          <p>
+            Day to day that means distributed systems work: replacing
+            pessimistic locking with PostgreSQL sequences, rebuilding a
+            ClickHouse query engine around an AST model, and wiring
+            policy-driven authorization across microservices over gRPC.
+          </p>
+          <p>
+            The other half is AI. I've built LLM orchestration pipelines at
+            Samsung PRISM, the first LLM-powered system at my university's Data
+            Science &amp; AI lab, and a multilingual voice assistant on OpenAI
+            APIs with speech-to-text and TTS.
+          </p>
+          <p>
+            What interests me there is the plumbing that makes model output
+            dependable: prompt structure, parsing, fallbacks, session state.
+            Correctness and latency both matter.
+          </p>
+        </div>
+
+        <aside class="about__facts reveal" data-delay="240">
+          <figure class="portrait">
+            <img
+              class="portrait__img"
+              src="img/portrait.jpg"
+              srcset="img/portrait.jpg 320w, img/portrait@2x.jpg 640w"
+              sizes="(max-width: 820px) 220px, 300px"
+              alt="Nikhil Mittal"
+              width="320" height="400" loading="lazy" decoding="async" />
+          </figure>
+
+          <div class="fact">
+            <span class="fact__k">Based in</span>
+            <span class="fact__v">Bengaluru, India</span>
+          </div>
+          <div class="fact">
+            <span class="fact__k">Education</span>
+            <span class="fact__v">B.E. Computer Engineering, TIET (8.58 CGPA)</span>
+          </div>
+          <div class="fact">
+            <span class="fact__k">Focus</span>
+            <span class="fact__v">AI engineering, RAG and agents, distributed backends, API design</span>
+          </div>
+          <div class="fact">
+            <span class="fact__k">Elsewhere</span>
+            <span class="fact__v">
+              <a href="https://github.com/nikhilcodes04" target="_blank" rel="noopener">GitHub</a> ·
+              <a href="https://linkedin.com/in/nikhilmittal11" target="_blank" rel="noopener">LinkedIn</a>
+            </span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ─────────────── EXPERIENCE ─────────────── -->
+    <section class="section" id="experience">
+      <div class="section__head reveal">
+        <span class="section__label">newest first</span>
+        <h2 class="section__title">Experience</h2>
+      </div>
+
+      <div class="timeline">
+
+        <article class="role reveal">
+          <div class="role__when">
+            <span class="role__date">Feb 2026 - Present</span>
+            <span class="role__place">Bengaluru</span>
+          </div>
+          <div class="role__main">
+            <h3 class="role__title">
+              Software Development Engineer Intern
+              <span class="role__org">SwiffyLabs</span>
+            </h3>
+            <ul class="bullets">
+              <li>Removed lock contention from the write path, replacing counter tables and pessimistic locking with PostgreSQL sequences and optimistic inserts: <strong>4×</strong> sequential and <strong>2.5×</strong> random ID-generation throughput under load.</li>
+              <li>Evolved a versioned ClickHouse query engine from flat AND-only filters to an AST model with nested boolean expressions, holding backward compatibility for every existing service client.</li>
+              <li>Integrated Maker-Checker, Authentication and Policy Engine across service boundaries, so authorization is policy-driven and enforced on every gRPC call.</li>
+              <li>Tuned PostgreSQL indexes and queries on a hot read path, eliminating sequential scans from OTP configuration lookups.</li>
+            </ul>
+            <ul class="tags">
+              <li>Java</li><li>Distributed systems</li><li>Microservices</li><li>gRPC</li><li>PostgreSQL</li><li>ClickHouse</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="role reveal">
+          <div class="role__when">
+            <span class="role__date">Oct 2025 - Jan 2026</span>
+            <span class="role__place">Remote</span>
+          </div>
+          <div class="role__main">
+            <h3 class="role__title">
+              Research Program Participant
+              <span class="role__org">Samsung PRISM</span>
+            </h3>
+            <ul class="bullets">
+              <li>Designed an LLM categorization pipeline for SmartThings automations, turning raw automation JSON into consistent categories across 50+ samples.</li>
+              <li>Engineered prompt templates and parsing logic that held category assignment and title accuracy stable across runs.</li>
+            </ul>
+            <ul class="tags">
+              <li>LLMs</li><li>Prompt Engineering</li><li>Python</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="role reveal">
+          <div class="role__when">
+            <span class="role__date">Jun 2025 - Aug 2025</span>
+            <span class="role__place">Patiala</span>
+          </div>
+          <div class="role__main">
+            <h3 class="role__title">
+              Full Stack Developer Intern
+              <span class="role__org">CoE in Data Science &amp; AI, TIET-UQ</span>
+            </h3>
+            <ul class="bullets">
+              <li>Built the backend for the lab's first LLM-powered system, serving 2 role-based dashboards.</li>
+              <li>Established centralized service layers for authentication, user workflows, and inference orchestration.</li>
+              <li>Decoupled LLM inference into independently deployable modules, improving modularity and deployment velocity.</li>
+            </ul>
+            <ul class="tags">
+              <li>LLM Orchestration</li><li>FastAPI</li><li>Python</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="role reveal">
+          <div class="role__when">
+            <span class="role__date">Jun 2025 - Aug 2025</span>
+            <span class="role__place">Remote</span>
+          </div>
+          <div class="role__main">
+            <h3 class="role__title">
+              Frontend Developer Intern
+              <span class="role__org">Cohyve</span>
+            </h3>
+            <ul class="bullets">
+              <li>Refactored 3 production React modules integrated with Node.js and MongoDB APIs.</li>
+              <li>Diagnosed and fixed production issues across 2 critical workflows, improving reliability for 100+ users.</li>
+            </ul>
+            <ul class="tags">
+              <li>React</li><li>Node.js</li><li>MongoDB</li>
+            </ul>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ─────────────── WORK ─────────────── -->
+    <section class="section" id="work">
+      <div class="section__head reveal">
+        <span class="section__label">three projects</span>
+        <h2 class="section__title">Selected work</h2>
+      </div>
+
+      <div class="projects">
+
+        <article class="project reveal">
+          <div class="project__meta">
+            <span class="project__year">2025</span>
+            <span class="project__type">AI / LLM backend</span>
+          </div>
+          <div class="project__main">
+            <h3 class="project__name">Aayu Mitra</h3>
+            <p class="project__desc">
+              An AI voice companion for elderly users. LLM APIs orchestrated
+              with speech-to-text and TTS, with Firestore persisting session
+              state and device identity so a conversation stays continuous
+              across days. Multilingual prompt pipelines carry fallback logic
+              for when emotion and intent detection comes back unreliable.
+            </p>
+            <ul class="tags">
+              <li>OpenAI API</li><li>LLM orchestration</li><li>STT / TTS</li><li>Python</li><li>Firestore</li>
+            </ul>
+            <div class="project__links">
+              <a href="https://github.com/nikhilcodes04" target="_blank" rel="noopener">Source<span class="arrow">↗</span></a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project reveal">
+          <div class="project__meta">
+            <span class="project__year">2025</span>
+            <span class="project__type">Backend / APIs</span>
+          </div>
+          <div class="project__main">
+            <h3 class="project__name">Wired</h3>
+            <p class="project__desc">
+              A mentor-matching platform serving 1,500+ students. 10+ REST APIs
+              behind JWT auth with role-based access control, and MongoDB
+              aggregation pipelines driving the matching itself.
+            </p>
+            <ul class="tags">
+              <li>Node.js</li><li>MongoDB</li><li>JWT</li><li>REST APIs</li><li>React</li>
+            </ul>
+            <div class="project__links">
+              <a href="#" target="_blank" rel="noopener">Live<span class="arrow">↗</span></a>
+              <a href="https://github.com/nikhilcodes04" target="_blank" rel="noopener">Source<span class="arrow">↗</span></a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project reveal">
+          <div class="project__meta">
+            <span class="project__year">2023</span>
+            <span class="project__type">Community</span>
+          </div>
+          <div class="project__main">
+            <h3 class="project__name">30 Days of Code</h3>
+            <p class="project__desc">
+              A coding-streak platform for the Microsoft Learn Student Chapter,
+              pulling live progress from the GitHub API into Firebase. Built
+              alongside a 500+ participant Makeathon I helped run.
+            </p>
+            <ul class="tags">
+              <li>Firebase</li><li>GitHub API</li><li>JavaScript</li>
+            </ul>
+            <div class="project__links">
+              <a href="https://github.com/nikhilcodes04" target="_blank" rel="noopener">Source<span class="arrow">↗</span></a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ─────────────── STACK ─────────────── -->
+    <section class="section" id="stack">
+      <div class="section__head reveal">
+        <span class="section__label">day to day</span>
+        <h2 class="section__title">Stack</h2>
+      </div>
+
+      <ul class="core reveal">
+        <li class="core__item"><img src="icons/java.svg" alt="" width="26" height="26" /><span>Java</span></li>
+        <li class="core__item"><img src="icons/spring.svg" alt="" width="26" height="26" /><span>Spring Boot</span></li>
+        <li class="core__item"><img src="icons/postgresql.svg" alt="" width="26" height="26" /><span>PostgreSQL</span></li>
+        <li class="core__item"><img src="icons/clickhouse.svg" alt="" width="26" height="26" /><span>ClickHouse</span></li>
+        <li class="core__item"><img src="icons/kafka.svg" alt="" width="26" height="26" /><span>Kafka</span></li>
+        <li class="core__item"><img src="icons/redis.svg" alt="" width="26" height="26" /><span>Redis</span></li>
+        <li class="core__item"><img src="icons/mongodb.svg" alt="" width="26" height="26" /><span>MongoDB</span></li>
+        <li class="core__item"><img src="icons/python.svg" alt="" width="26" height="26" /><span>Python</span></li>
+        <li class="core__item"><img src="icons/openai.svg" alt="" width="26" height="26" /><span>OpenAI</span></li>
+        <li class="core__item"><img src="icons/kubernetes.svg" alt="" width="26" height="26" /><span>Kubernetes</span></li>
+        <li class="core__item"><img src="icons/docker.svg" alt="" width="26" height="26" /><span>Docker</span></li>
+        <li class="core__item"><img src="icons/nodejs.svg" alt="" width="26" height="26" /><span>Node.js</span></li>
+        <li class="core__item"><img src="icons/typescript.svg" alt="" width="26" height="26" /><span>TypeScript</span></li>
+        <li class="core__item"><img src="icons/react.svg" alt="" width="26" height="26" /><span>React</span></li>
+      </ul>
+
+      <div class="stack">
+        <div class="stack__group reveal">
+          <h3>Backend</h3>
+          <ul>
+            <li>Java</li><li>Spring / Spring Boot</li><li>Microservices</li>
+            <li>gRPC</li><li>REST &amp; API design</li><li>Node.js / Express</li>
+            <li>FastAPI</li><li>Kafka</li><li>Auth &amp; authorization</li>
+          </ul>
+        </div>
+        <div class="stack__group reveal" data-delay="80">
+          <h3>Databases</h3>
+          <ul>
+            <li>PostgreSQL</li><li>ClickHouse</li><li>MongoDB</li>
+            <li>Redis</li><li>MySQL</li><li>Firestore</li>
+          </ul>
+        </div>
+        <div class="stack__group stack__group--wide reveal" data-delay="160">
+          <h3>AI engineering</h3>
+          <ul>
+            <li>LLM orchestration</li><li>RAG pipelines</li><li>Agent workflows</li>
+            <li>Prompt engineering</li><li>Tool use &amp; function calling</li>
+            <li>Embeddings &amp; vector search</li><li>OpenAI API</li>
+            <li>Inference pipelines</li><li>Structured output parsing</li>
+            <li>Context &amp; session state</li><li>Multilingual prompting</li>
+            <li>STT / TTS pipelines</li><li>Fallback &amp; reliability logic</li>
+            <li>Output consistency</li>
+          </ul>
+        </div>
+        <div class="stack__group reveal" data-delay="240">
+          <h3>Frontend &amp; Tooling</h3>
+          <ul>
+            <li>React</li><li>TypeScript</li><li>JavaScript</li>
+            <li>Docker</li><li>Kubernetes</li><li>Git</li><li>Azure DevOps</li>
+            <li>Postman / ghz</li>
+          </ul>
+        </div>
+        <div class="stack__group reveal" data-delay="320">
+          <h3>Core CS</h3>
+          <ul>
+            <li>Data Structures &amp; Algorithms</li><li>DBMS</li><li>Operating Systems</li>
+            <li>Computer Networks</li><li>OOP</li><li>SQL</li><li>C++</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────── CONTACT ─────────────── -->
+    <section class="section section--contact" id="contact">
+      <div class="section__head reveal">
+        <span class="section__label">open to roles</span>
+        <h2 class="section__title">Contact</h2>
+      </div>
+
+      <div class="contact reveal" data-delay="120">
+        <p class="contact__lede">
+          Building something backend-heavy, or hiring for one?
+        </p>
+        <a class="contact__mail" href="mailto:nikhilmittal2004@gmail.com">
+          nikhilmittal2004@gmail.com
+          <span class="arrow">↗</span>
+        </a>
+        <div class="contact__socials">
+          <a href="https://github.com/nikhilcodes04" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/nikhilmittal11" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="Nikhil_Mittal_Resume.pdf" target="_blank" rel="noopener">Résumé</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span>© <span id="year">2026</span> Nikhil Mittal</span>
+    <span class="footer__note">Built from scratch. No frameworks.</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

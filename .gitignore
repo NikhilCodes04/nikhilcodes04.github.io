@@ -1,0 +1,10 @@
+# Claude Code workspace
+.claude/
+
+# Source photo: 1.3MB and unreferenced. The site serves img/portrait*.jpg,
+# generated from it. Keep it locally, out of the repo.
+Profile_Photo.png
+
+# OS cruft
+Thumbs.db
+.DS_Store

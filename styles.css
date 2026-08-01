@@ -1,0 +1,1307 @@
+/* ============================================================
+   Nikhil Mittal, portfolio
+   Plain CSS. No build step. Custom properties drive theming.
+   ============================================================ */
+
+/* ---------- tokens ---------- */
+:root {
+  /* ink, not neutral black: a cool cast so the warm accent reads as signal */
+  --bg:            #0b0d12;
+  --bg-elev:       #12151c;
+  --fg:            #e8eaf0;
+  --fg-muted:      #838b9c;
+  --fg-faint:      #4e5666;
+  --line:          #1d222c;
+
+  /* amber: the color a query planner highlights cost in */
+  --accent:        #ffb454;
+  --accent-soft:   rgba(255, 180, 84, 0.10);
+  /* opaque twin of accent-soft: diagram nodes must hide the packet travelling
+     behind them, and a translucent fill let it show through a lit box */
+  --accent-wash:   color-mix(in srgb, var(--accent) 11%, var(--bg-elev));
+  --glow-a:        rgba(255, 180, 84, 0.09);
+
+  --font-sans: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* fluid scale: everything breathes with the viewport */
+  --step--1: clamp(0.76rem, 0.73rem + 0.15vw, 0.84rem);
+  --step-0:  clamp(0.95rem, 0.90rem + 0.25vw, 1.05rem);
+  --step-1:  clamp(1.12rem, 1.02rem + 0.5vw,  1.35rem);
+  --step-2:  clamp(1.45rem, 1.25rem + 1vw,    2rem);
+  --step-3:  clamp(2rem,    1.5rem  + 2.4vw,  3.2rem);
+  --step-4:  clamp(2.9rem,  1.9rem  + 4.4vw,  5.6rem);
+
+  --gutter: clamp(1.25rem, 5vw, 6rem);
+  --section-gap: clamp(6rem, 14vh, 11rem);
+  --measure: 60ch;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur: 0.7s;
+}
+
+:root[data-theme="light"] {
+  --bg:          #f7f7f5;
+  --bg-elev:     #ffffff;
+  --fg:          #14161b;
+  --fg-muted:    #5c6270;
+  --fg-faint:    #9aa0ac;
+  --line:        #e3e3df;
+
+  /* amber has to darken hard to stay legible on paper */
+  --accent:      #8a5200;
+  --accent-soft: rgba(138, 82, 0, 0.08);
+  --accent-wash: color-mix(in srgb, var(--accent) 9%, var(--bg-elev));
+  --glow-a:      rgba(138, 82, 0, 0.07);
+}
+
+/* ---------- reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  font-weight: 400;
+  line-height: 1.62;
+  letter-spacing: -0.006em;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background 0.5s var(--ease), color 0.5s var(--ease);
+}
+
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; padding: 0; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+::selection { background: var(--accent); color: #0b0d12; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---------- ambient layer ----------
+   one warm wash, anchored top-left behind the name. no grain, no second
+   gradient: the page's interest comes from type and structure, not texture. */
+.glow {
+  position: fixed;
+  inset: -30vmax;
+  z-index: -2;
+  pointer-events: none;
+  background: radial-gradient(42vmax 42vmax at 18% 8%, var(--glow-a), transparent 64%);
+}
+
+/* ---------- nav ---------- */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.15rem var(--gutter);
+  /* blurred from the start, not only once stuck: the diagrams and logo chips
+     scroll under this bar and were showing through the nav text */
+  background: color-mix(in srgb, var(--bg) 60%, transparent);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  transition: background 0.4s var(--ease), border-color 0.4s var(--ease),
+              padding 0.4s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+.nav.is-stuck {
+  padding-block: 0.8rem;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  border-bottom-color: var(--line);
+}
+
+/* A wordmark, not a monogram: the name is short enough to just say, and it
+   echoes the hero's type rather than competing with an icon. */
+.nav__mark {
+  position: relative;
+  font-size: clamp(0.9rem, 0.86rem + 0.2vw, 1.02rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  color: var(--fg);
+  white-space: nowrap;
+  padding-block: 0.15rem 0.3rem;
+  transition: color 0.35s var(--ease);
+}
+/* The underline is the scroll indicator: it fills as you read, so the mark
+   moves constantly but always means something. A free-running loop here
+   would pulse in fixed chrome for the whole visit and fight the hero. */
+.nav__mark::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%;
+  height: 1.5px;
+  background: var(--accent);
+  transform: scaleX(var(--p, 0));
+  transform-origin: left;
+}
+
+/* the track it fills along, so the bar reads as progress and not decoration */
+.nav__mark::before {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%;
+  height: 1.5px;
+  background: var(--line);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav__mark:hover { color: var(--accent); }
+}
+
+/* the wordmark and the links would collide before the menu takes over */
+@media (max-width: 900px) {
+  .nav__mark { font-size: 0.92rem; }
+}
+
+.nav__links {
+  display: flex;
+  gap: clamp(1rem, 2.4vw, 2.2rem);
+  font-size: var(--step--1);
+  color: var(--fg-muted);
+  margin-left: auto;
+  margin-right: clamp(1rem, 2.4vw, 2.2rem);
+}
+.nav__links a {
+  position: relative;
+  padding-block: 0.25rem;
+  transition: color 0.3s var(--ease);
+}
+.nav__links a::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--ease);
+}
+.nav__links a.is-active { color: var(--fg); }
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 42px; height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--fg-muted);
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease), transform 0.5s var(--ease);
+}
+
+/* hover styling only where a real pointer exists;
+   otherwise these stick after a tap on touchscreens */
+@media (hover: hover) and (pointer: fine) {
+  .nav__links a:hover { color: var(--fg); }
+  .nav__links a:hover::after { transform: scaleX(1); transform-origin: left; }
+  .theme-toggle:hover {
+    color: var(--fg);
+    border-color: var(--fg-faint);
+    transform: rotate(45deg);
+  }
+}
+
+/* ---------- mobile menu ---------- */
+.menu-btn {
+  display: none;
+  place-items: center;
+  gap: 5px;
+  width: 42px; height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--fg-muted);
+  transition: border-color 0.3s var(--ease);
+}
+.menu-btn span {
+  display: block;
+  width: 15px; height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform 0.4s var(--ease), opacity 0.25s var(--ease);
+}
+.menu-btn[aria-expanded="true"] { color: var(--fg); }
+.menu-btn[aria-expanded="true"] span:first-child { transform: translateY(3.25px) rotate(45deg); }
+.menu-btn[aria-expanded="true"] span:last-child  { transform: translateY(-3.25px) rotate(-45deg); }
+
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 6rem var(--gutter) calc(2rem + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
+  backdrop-filter: blur(22px) saturate(150%);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+  overscroll-behavior: contain;
+}
+.menu[hidden] { display: none; }
+.menu.is-open { opacity: 1; }
+
+.menu__links {
+  display: grid;
+  gap: 0.15rem;
+}
+.menu__links a {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  font-size: clamp(1.9rem, 9vw, 2.8rem);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  color: var(--fg);
+  opacity: 0;
+  transform: translateY(14px);
+}
+.menu.is-open .menu__links a {
+  animation: menuIn 0.55s var(--ease) forwards;
+}
+.menu.is-open .menu__links a:nth-child(1) { animation-delay: 0.06s; }
+.menu.is-open .menu__links a:nth-child(2) { animation-delay: 0.11s; }
+.menu.is-open .menu__links a:nth-child(3) { animation-delay: 0.16s; }
+.menu.is-open .menu__links a:nth-child(4) { animation-delay: 0.21s; }
+.menu.is-open .menu__links a:nth-child(5) { animation-delay: 0.26s; }
+
+@keyframes menuIn { to { opacity: 1; transform: none; } }
+
+.menu__branch {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--fg-faint);
+  line-height: 1;
+}
+.menu__branch::before { content: "├"; }
+.menu__links a:last-child .menu__branch::before { content: "└"; }
+
+.menu__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem 1.5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+}
+.menu__foot a { padding: 0.35rem 0; }
+
+body.menu-open { overflow: hidden; }
+
+@media (max-width: 780px) {
+  .nav__links { display: none; }
+  .menu-btn { display: inline-grid; }
+}
+
+/* ---------- layout ---------- */
+main { width: 100%; }
+
+.section {
+  max-width: 1180px;
+  margin-inline: auto;
+  padding: 0 var(--gutter) var(--section-gap);
+}
+
+.section__head {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding-bottom: clamp(2rem, 5vh, 3.5rem);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: clamp(2.5rem, 6vh, 4.5rem);
+}
+/* label, not a number: 01/02/03 would imply a sequence these sections
+   don't have. Each label says what the section actually is. */
+.section__label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--fg-faint);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.section__label::before {
+  content: "// ";
+  color: var(--accent);
+}
+.section__title {
+  font-size: var(--step-2);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  text-transform: lowercase;
+}
+
+/* ---------- hero ---------- */
+.hero {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  max-width: 1180px;
+  margin-inline: auto;
+  padding: 6.5rem var(--gutter) 3rem;
+  position: relative;
+}
+
+.hero__lead {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.8rem, 1.7vh, 1.3rem);
+  min-width: 0;
+}
+
+/* ---------- the diagram carousel ----------
+   The one bold element on the page, and the only illustration. Each slide is a
+   system from the resume drawn as it actually is, so the hero shows the work
+   rather than describing it. Slide 1 is a structure and draws itself; the rest
+   are flows, so their edges run. --dwell is shared with script.js. */
+.viz {
+  --dwell: 7s;
+  margin: 0 0 0 auto;
+  min-width: 0;
+  max-width: 470px;     /* keeps the diagram a companion, not the headline */
+  width: 100%;
+}
+
+.viz__stage {
+  position: relative;
+  aspect-ratio: 400 / 268;   /* fixed frame: slides swap without layout jump */
+}
+
+.viz__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+}
+.viz__slide[hidden] { display: none; }
+.viz__slide.is-active { opacity: 1; }
+
+.viz svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* --- shared diagram vocabulary --- */
+.v-edge path {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.v-node rect {
+  fill: var(--bg-elev);
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.v-node text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--fg-muted);
+  text-anchor: middle;
+  letter-spacing: 0.01em;
+}
+/* operators and outcomes carry the accent; everything else stays quiet */
+.v-node--op rect { stroke: var(--accent); fill: var(--accent-wash); }
+.v-node--op text { fill: var(--accent); font-weight: 500; }
+
+.v-tag {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  fill: var(--fg-faint);
+  text-anchor: middle;
+  letter-spacing: 0.06em;
+}
+.v-tag--left { text-anchor: start; letter-spacing: 0.1em; }
+.v-tag--on { fill: var(--accent); }
+
+.v-lane {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--fg-muted);
+  text-anchor: start;
+}
+
+/* what each hop in the chain is actually checking */
+.v-side {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  fill: var(--fg-faint);
+  text-anchor: start;
+  letter-spacing: 0.04em;
+}
+
+.v-gate rect { fill: var(--bg); stroke: var(--accent); stroke-width: 1.5; }
+
+.v-pip circle { fill: var(--fg-faint); }
+.v-pip--parallel circle { fill: var(--accent); }
+
+.v-metric {
+  font-family: var(--font-sans);
+  font-size: 34px;
+  font-weight: 700;
+  fill: var(--accent);
+  text-anchor: end;
+  letter-spacing: -0.03em;
+}
+
+/* one caption for the figure, outside the absolute stage so it can never
+   land on top of the tabs. script.js swaps its text per slide. */
+.viz__caption {
+  display: block;
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  line-height: 1.55;
+  color: var(--fg-faint);
+  letter-spacing: 0.01em;
+  min-height: 3.3em;      /* reserved, so the tabs never shift between slides */
+}
+
+/* --- tabs --- */
+.viz__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+.viz__tab {
+  position: relative;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--fg-faint);
+  letter-spacing: 0.02em;
+  overflow: hidden;
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.viz__tab.is-active { color: var(--accent); border-color: var(--accent); }
+
+/* the active tab fills as its slide runs out, so the rotation is legible */
+.viz__tab.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--accent);
+  transform-origin: left;
+  animation: vizDwell var(--dwell) linear forwards;
+}
+.viz.is-paused .viz__tab.is-active::after { animation-play-state: paused; }
+@keyframes vizDwell { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+@media (hover: hover) and (pointer: fine) {
+  .viz__tab:hover { color: var(--fg-muted); border-color: var(--fg-faint); }
+  .viz__tab.is-active:hover { color: var(--accent); }
+}
+
+/* --- entrance: replays each time a slide becomes active --- */
+.viz__slide.is-active .v-edge--draw path {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: vizDraw 0.85s var(--ease) 0.1s forwards;
+}
+.viz__slide.is-active .v-node {
+  opacity: 0;
+  animation: vizPop 0.45s var(--ease) forwards;
+  animation-delay: calc(0.25s + var(--i) * 0.06s);
+}
+@keyframes vizDraw { to { stroke-dashoffset: 0; } }
+@keyframes vizPop {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* --- ambient: flows keep running, the tree stays still --- */
+.viz__slide.is-active .v-edge--flow path {
+  stroke-dasharray: 4 6;
+  animation: vizFlow 1.1s linear infinite;
+}
+@keyframes vizFlow { to { stroke-dashoffset: -20; } }
+
+/* --- work in motion ---
+   Every slide runs on the same 5s bar. A packet rides its route, and each node
+   lights on the beat it is actually reached: --t is that arrival time, derived
+   from distance along the path, so nothing drifts out of step. */
+/* Both routes are straight, so these are plain transforms rather than
+   offset-path: offset-path silently fails on SVG children in some browsers,
+   which dumped the packet at cx/cy 0 in the top-left corner. */
+.v-packet { fill: var(--accent); }
+
+.viz__slide.is-active .v-packet--authz {
+  animation: vizDrop 5s linear infinite;
+}
+.viz__slide.is-active .v-packet--llm {
+  animation: vizGlide 5s linear infinite;
+}
+
+@keyframes vizDrop {          /* request centre 28 down to verdict centre 244 */
+  from { transform: translateY(0); }
+  to   { transform: translateY(216px); }
+}
+@keyframes vizGlide {         /* voice in at 35 across to voice out at 353 */
+  from { transform: translateX(0); }
+  to   { transform: translateX(318px); }
+}
+
+/* quiet nodes light up */
+.viz__slide.is-active .v-node--hit rect {
+  animation: vizHit 5s linear infinite;
+  animation-delay: var(--t);
+}
+@keyframes vizHit {
+  0%, 7%    { stroke: var(--accent); fill: var(--accent-wash); }
+  24%, 100% { stroke: var(--line);   fill: var(--bg-elev); }
+}
+
+/* nodes already carrying the accent thicken instead, so they stay legible */
+.viz__slide.is-active .v-node--pulse rect {
+  animation: vizPulse 5s linear infinite;
+  animation-delay: var(--t);
+}
+@keyframes vizPulse {
+  0%, 6%    { stroke-width: 2.6; }
+  22%, 100% { stroke-width: 1; }
+}
+
+/* the lock serialises inserts; the sequence lets them through together */
+.viz__slide.is-active .v-pip--serial circle {
+  animation: vizSerial 4.2s var(--ease) infinite;
+  animation-delay: calc(var(--i) * 1.4s);
+}
+.viz__slide.is-active .v-pip--parallel circle {
+  animation: vizParallel 1.5s var(--ease) infinite;
+  animation-delay: calc(var(--i) * 0.12s);
+}
+@keyframes vizSerial {
+  0%        { transform: translateX(0);     opacity: 0; }
+  6%        { opacity: 1; }
+  40%, 52%  { transform: translateX(102px); opacity: 1; }   /* waits at the lock */
+  94%       { transform: translateX(238px); opacity: 1; }
+  100%      { transform: translateX(238px); opacity: 0; }
+}
+@keyframes vizParallel {
+  0%   { transform: translateX(0);     opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(238px); opacity: 0; }
+}
+
+/* Hovering pauses the rotation and its dwell bar, never the diagram itself:
+   pausing the slide's contents froze the entrance mid-fade, leaving nodes
+   stuck at opacity 0 for anyone whose cursor was over the figure. */
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .viz { margin-top: 1rem; }
+  .viz figcaption { min-height: 0; }
+}
+
+.hero__title {
+  font-size: var(--step-4);
+  font-weight: 700;
+  line-height: 0.86;
+  letter-spacing: -0.05em;
+}
+.hero__title .line {
+  display: block;
+  overflow: hidden;
+}
+.hero__title .line > span {
+  display: block;
+  transform: translateY(105%);
+  animation: rise 1.05s var(--ease) forwards;
+}
+.hero__title .line:nth-child(2) > span { animation-delay: 0.11s; }
+
+@keyframes rise { to { transform: translateY(0); } }
+
+.hero__lede {
+  max-width: 46ch;
+  color: var(--fg-muted);
+  font-size: var(--step-1);
+  line-height: 1.55;
+  margin-top: 0.4rem;
+}
+
+/* ---------- the plan block ----------
+   His ClickHouse work turned flat filters into a nested tree. The page borrows
+   that shape: a query plan is how this trade prints its own structure, so the
+   hero states the three facts a reader needs in exactly that form. */
+.plan {
+  display: grid;
+  gap: 0;
+  margin: 0.5rem 0 0.3rem;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  line-height: 1.5;
+  max-width: 62ch;
+}
+
+.plan__row {
+  display: grid;
+  grid-template-columns: 1.25rem 5.5rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0 0.75rem;
+  padding: 0.42rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.plan__row:first-child { border-top: 1px solid var(--line); }
+
+/* the connector column: real tree glyphs, drawn not typed */
+.plan__row::before {
+  content: "├";
+  color: var(--fg-faint);
+  font-weight: 400;
+}
+.plan__row:last-child::before { content: "└"; }
+
+.plan dt {
+  color: var(--accent);
+  letter-spacing: 0.02em;
+}
+.plan dd {
+  margin: 0;
+  color: var(--fg-muted);
+}
+
+.plan__dim {
+  color: var(--fg-faint);
+  margin-left: 0.35rem;
+}
+.plan__to {
+  color: var(--fg-faint);
+  padding: 0 0.15rem;
+}
+.plan__metric {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+@media (max-width: 560px) {
+  .plan__row {
+    grid-template-columns: 1rem minmax(0, 1fr);
+    gap: 0 0.6rem;
+  }
+  .plan dt { grid-column: 2; }
+  .plan dd { grid-column: 2; }
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 46px;               /* comfortable thumb target */
+  padding: 0.7rem 1.5rem;
+  border-radius: 100px;
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  border: 1px solid transparent;
+  transition: transform 0.4s var(--ease), background 0.35s var(--ease),
+              color 0.35s var(--ease), border-color 0.35s var(--ease);
+}
+.btn:active { transform: scale(0.97); }
+
+.btn--solid { background: var(--fg); color: var(--bg); }
+.btn--ghost { border-color: var(--line); color: var(--fg-muted); }
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { transform: translateY(-2px); }
+  .btn--solid:hover { background: var(--accent); color: #fff; }
+  .btn--ghost:hover { border-color: var(--fg-faint); color: var(--fg); }
+}
+
+/* on narrow screens the two buttons split the row evenly */
+@media (max-width: 400px) {
+  .hero__actions { gap: 0.6rem; }
+  .btn { flex: 1 1 0; justify-content: center; padding-inline: 1rem; }
+}
+
+/* ---------- about ---------- */
+.about {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: start;
+}
+.about__body {
+  display: grid;
+  gap: 1.35rem;
+  max-width: var(--measure);
+  color: var(--fg-muted);
+  font-size: var(--step-1);
+  line-height: 1.72;
+}
+.about__body p:first-child { color: var(--fg); }
+
+.about__facts {
+  display: grid;
+  gap: 0;
+}
+
+/* The portrait arrives monochrome, which puts it inside the page's palette,
+   then blooms into full colour as the section scrolls in. The green backdrop
+   is the busiest thing on the page, so it enters quiet and earns its colour. */
+.portrait {
+  position: relative;
+  margin: 0 0 1.75rem;
+  max-width: 300px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--bg-elev);
+}
+
+.portrait__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  /* the overscale hides the soft edge blur() leaves on the element bounds */
+  filter: grayscale(1) blur(14px) contrast(1.06);
+  transform: scale(1.12);
+  /* an even curve, not the page's ease-out: a hard ease-out finishes visually
+     in the first third and made the reveal feel clipped */
+  transition: filter 2.4s cubic-bezier(0.45, 0, 0.25, 1),
+              transform 2.6s cubic-bezier(0.45, 0, 0.25, 1);
+}
+
+/* the aside carries .reveal, so its is-visible flag drives the bloom too */
+.about__facts.is-visible .portrait__img {
+  filter: grayscale(0) blur(0) contrast(1);
+  transform: scale(1);
+  transition-delay: 0.35s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .portrait:hover .portrait__img {
+    filter: grayscale(0) saturate(1.08);
+    transform: scale(1.035);
+    transition-duration: 0.7s;
+    transition-delay: 0s;
+  }
+}
+
+/* no slow bloom: land on the finished image */
+@media (prefers-reduced-motion: reduce) {
+  .portrait__img { filter: none; transform: none; }
+}
+
+.fact:first-of-type { border-top: 1px solid var(--line); }
+
+.fact {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 1rem;
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--step--1);
+}
+.fact__k {
+  font-family: var(--font-mono);
+  color: var(--fg-faint);
+  letter-spacing: 0.02em;
+}
+.fact__v { color: var(--fg); }
+.fact__v a {
+  display: inline-block;
+  padding: 0.2rem 0;
+  color: var(--fg-muted);
+  border-bottom: 1px solid var(--line);
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .fact__v a:hover { color: var(--accent); border-color: var(--accent); }
+}
+
+@media (max-width: 820px) {
+  .about { grid-template-columns: 1fr; }
+  /* once the columns stack, the portrait centers over the facts below it */
+  .portrait { max-width: 220px; margin-inline: auto; }
+}
+@media (max-width: 420px) {
+  /* stack the label above the value rather than squeezing two columns */
+  .fact { grid-template-columns: 1fr; gap: 0.2rem; }
+}
+
+/* ---------- experience ----------
+   A spine with a node per role. This is the one section where order is real
+   information, so it is the one section drawn as a sequence. */
+.timeline {
+  display: grid;
+  position: relative;
+  padding-left: 1.75rem;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2.4rem;
+  bottom: 2.4rem;
+  width: 1px;
+  background: var(--line);
+}
+
+.role {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  gap: clamp(1rem, 4vw, 3rem);
+  padding: clamp(1.5rem, 3.5vh, 2.2rem) 0;
+  position: relative;
+}
+.role::before {
+  content: "";
+  position: absolute;
+  left: -1.75rem;
+  top: 2.05rem;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1px solid var(--fg-faint);
+  background: var(--bg);
+}
+/* the current role is the only filled node */
+.role:first-child::before {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.role__when {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--fg-faint);
+  padding-top: 0.35rem;
+}
+.role__date { color: var(--fg-muted); }
+.role:first-child .role__date { color: var(--accent); }
+
+.role__main { display: grid; gap: 0.9rem; }
+
+.role__title {
+  font-size: var(--step-1);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+.role__org {
+  display: block;
+  font-size: var(--step-0);
+  font-weight: 400;
+  color: var(--accent);
+  margin-top: 0.1rem;
+}
+
+.bullets {
+  display: grid;
+  gap: 0.6rem;
+  max-width: var(--measure);
+  color: var(--fg-muted);
+  font-size: var(--step-0);
+}
+.bullets li {
+  position: relative;
+  padding-left: 1.15rem;
+  line-height: 1.6;
+}
+.bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0.72em;
+  width: 5px; height: 1px;
+  background: var(--fg-faint);
+}
+.bullets strong {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+@media (max-width: 700px) {
+  .timeline { padding-left: 1.4rem; }
+  .role { grid-template-columns: 1fr; gap: 0.85rem; }
+  .role::before { left: -1.4rem; top: 1.55rem; }
+  .role__when { flex-direction: row; gap: 0.9rem; padding-top: 0; }
+}
+
+/* ---------- projects ---------- */
+.projects { display: grid; }
+
+.project {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: clamp(1rem, 4vw, 3rem);
+  padding: clamp(1.8rem, 4vh, 2.8rem) 0;
+  border-top: 1px solid var(--line);
+  position: relative;
+  transition: border-color 0.4s var(--ease);
+}
+.project:last-child { border-bottom: 1px solid var(--line); }
+
+/* soft wash on hover, no layout shift */
+.project::before {
+  content: "";
+  position: absolute;
+  inset: 0 calc(var(--gutter) * -0.5);
+  background: var(--accent-soft);
+  opacity: 0;
+  border-radius: 10px;
+  transition: opacity 0.45s var(--ease);
+  pointer-events: none;
+  z-index: -1;
+}
+@media (hover: hover) and (pointer: fine) {
+  .project:hover::before { opacity: 1; }
+  .project:hover .project__name { color: var(--accent); }
+}
+
+.project__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--fg-faint);
+  padding-top: 0.4rem;
+}
+.project__type { color: var(--accent); }
+
+.project__main { display: grid; gap: 0.85rem; }
+
+.project__name {
+  font-size: var(--step-2);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  transition: color 0.35s var(--ease);
+}
+
+.project__desc {
+  color: var(--fg-muted);
+  max-width: var(--measure);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.15rem;
+}
+.tags li {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  color: var(--fg-muted);
+  padding: 0.24rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  background: var(--bg-elev);
+}
+
+.project__links {
+  display: flex;
+  gap: 1.4rem;
+  margin-top: 0.35rem;
+  font-size: var(--step--1);
+}
+.project__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 40px;
+  color: var(--fg-muted);
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--line);
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.arrow {
+  display: inline-block;
+  transition: transform 0.35s var(--ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project__links a:hover { color: var(--fg); border-color: var(--fg); }
+  a:hover > .arrow { transform: translate(2px, -2px); }
+}
+
+@media (max-width: 700px) {
+  .project { grid-template-columns: 1fr; gap: 0.9rem; }
+  .project__meta { flex-direction: row; gap: 0.9rem; padding-top: 0; }
+  .project::before { inset: 0 calc(var(--gutter) * -0.4); }
+}
+
+/* ---------- stack: core logo tiles ---------- */
+.core {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-bottom: clamp(2.5rem, 6vh, 4rem);
+}
+
+.core__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1rem 0.6rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  background: var(--bg-elev);
+  font-size: var(--step--1);
+  white-space: nowrap;
+  color: var(--fg-muted);
+  transition: border-color 0.35s var(--ease), color 0.35s var(--ease),
+              transform 0.4s var(--ease);
+}
+
+.core__item img {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+/* if the icon fails to load, the tile still reads as a labelled chip */
+.core__item img[data-failed] { display: none; }
+
+@media (hover: hover) and (pointer: fine) {
+  .core__item:hover {
+    color: var(--fg);
+    border-color: var(--fg-faint);
+    transform: translateY(-3px);
+  }
+}
+
+@media (max-width: 480px) {
+  .core { gap: 0.45rem; }
+  .core__item {
+    gap: 0.5rem;
+    padding: 0.5rem 0.8rem 0.5rem 0.6rem;
+    font-size: 0.75rem;
+  }
+  .core__item img { width: 19px; height: 19px; }
+}
+
+/* ---------- stack: detail lists ---------- */
+.stack {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+.stack__group h3 {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  font-weight: 500;
+  color: var(--fg-faint);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-bottom: 0.9rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+.stack__group ul { display: grid; gap: 0.55rem; }
+
+/* AI carries the most entries, so it gets the room to stay two columns */
+.stack__group--wide { grid-column: span 2; }
+.stack__group--wide ul {
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.55rem 1.5rem;
+}
+@media (max-width: 900px) {
+  .stack__group--wide { grid-column: span 1; }
+}
+.stack__group li {
+  color: var(--fg-muted);
+  transition: color 0.25s var(--ease), transform 0.35s var(--ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .stack__group li:hover {
+    color: var(--fg);
+    transform: translateX(4px);
+  }
+}
+
+/* two tidy columns on phones instead of one very long list */
+@media (max-width: 620px) {
+  .stack { gap: 2rem 1.5rem; grid-template-columns: 1fr; }
+  .stack__group ul {
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: 0.5rem 1rem;
+  }
+}
+
+/* ---------- contact ---------- */
+.section--contact { padding-bottom: clamp(4rem, 10vh, 7rem); }
+
+.contact { display: grid; gap: clamp(1.5rem, 4vh, 2.5rem); }
+
+.contact__lede {
+  max-width: 46ch;
+  font-size: var(--step-1);
+  color: var(--fg-muted);
+}
+
+.contact__mail {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-self: start;
+  font-size: var(--step-3);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  word-break: break-word;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: color 0.35s var(--ease), background-size 0.6s var(--ease);
+}
+
+.contact__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  font-size: var(--step--1);
+  color: var(--fg-muted);
+}
+.contact__socials a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--line);
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .contact__mail:hover { color: var(--accent); background-size: 100% 1px; }
+  .contact__socials a:hover { color: var(--fg); border-color: var(--fg); }
+}
+
+/* the address is long: let it shrink rather than overflow */
+@media (max-width: 560px) {
+  .contact__mail {
+    font-size: clamp(1.25rem, 6.5vw, 2rem);
+    background-size: 100% 1px;      /* underline always on, no hover to reveal it */
+  }
+  .contact__socials { gap: 0.6rem 1.4rem; }
+}
+
+/* ---------- footer ---------- */
+.footer {
+  max-width: 1180px;
+  margin-inline: auto;
+  padding: 1.8rem var(--gutter) 2.5rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.5rem;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+  color: var(--fg-faint);
+}
+
+/* ---------- scroll reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- mobile refinements ---------- */
+@media (max-width: 700px) {
+  :root {
+    --section-gap: clamp(4.5rem, 10vh, 7rem);
+    --measure: 100%;
+  }
+
+  /* no grey flash box on tap */
+  body { -webkit-tap-highlight-color: transparent; }
+
+  .section__head { padding-bottom: 1.5rem; margin-bottom: 2rem; }
+  .hero { padding-top: 6rem; }
+  .footer { flex-direction: column; gap: 0.4rem; }
+}
+
+/* short landscape phones: don't force a full-height hero */
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero { min-height: auto; padding-block: 7rem 4rem; }
+  .menu { justify-content: flex-start; overflow-y: auto; padding-top: 5rem; }
+  .menu__links a { font-size: 1.5rem; padding: 0.35rem 0; }
+}
+
+/* respect notches and home indicators */
+@supports (padding: max(0px)) {
+  .nav { padding-left: max(var(--gutter), env(safe-area-inset-left));
+         padding-right: max(var(--gutter), env(safe-area-inset-right)); }
+  .footer { padding-bottom: max(2.5rem, calc(1.5rem + env(safe-area-inset-bottom))); }
+}
+
+/* ---------- motion & print ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+  .hero__title .line > span { transform: none; }
+  .v-packet { display: none; }   /* nothing to gain from a frozen dot */
+}
+
+@media print {
+  .glow, .nav, .viz { display: none; }
+  body { background: #fff; color: #000; }
+}
