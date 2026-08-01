@@ -8,7 +8,7 @@
   <title>Nikhil Mittal | Backend &amp; AI Engineer</title>
   <meta name="description" content="Backend and AI engineer. Distributed services, query engines, and LLM systems: RAG, agents, inference pipelines. Java, Spring Boot, PostgreSQL, ClickHouse, gRPC, OpenAI." />
   <meta name="author" content="Nikhil Mittal" />
-  <meta name="keywords" content="AI engineer, LLM engineer, AI agents, agentic workflows, RAG, retrieval-augmented generation, vector search, embeddings, function calling, backend engineer, LLM orchestration, prompt engineering, inference pipelines, OpenAI API, generative AI, STT, TTS, speech pipelines, Java, Spring Boot, microservices, gRPC, Kafka, Kubernetes, PostgreSQL, ClickHouse, MongoDB, Redis, Docker, Python, distributed systems, API design" />
+  <meta name="keywords" content="AI engineer, LLM engineer, AI agents, agentic workflows, RAG, retrieval-augmented generation, vector search, embeddings, function calling, backend engineer, LLM orchestration, prompt engineering, inference pipelines, OpenAI API, generative AI, STT, TTS, speech pipelines, Java, Spring Boot, microservices, gRPC, Keycloak, identity and access management, async processing, Kafka, Kubernetes, PostgreSQL, ClickHouse, MongoDB, Redis, Docker, Python, distributed systems, API design" />
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Nikhil Mittal | Backend &amp; AI Engineer" />
@@ -363,10 +363,12 @@
               <li>Removed lock contention from the write path, replacing counter tables and pessimistic locking with PostgreSQL sequences and optimistic inserts: <strong>4×</strong> sequential and <strong>2.5×</strong> random ID-generation throughput under load.</li>
               <li>Evolved a versioned ClickHouse query engine from flat AND-only filters to an AST model with nested boolean expressions, holding backward compatibility for every existing service client.</li>
               <li>Integrated Maker-Checker, Authentication and Policy Engine across service boundaries, so authorization is policy-driven and enforced on every gRPC call.</li>
+              <li>Built the Authentication service's management surface: APIs for user lifecycle, per-user role assignment, role-mapping and user-data queries, and Keycloak theme configuration.</li>
+              <li>Extended the bulk import service with asynchronous processing, moving large data loads off the request path.</li>
               <li>Tuned PostgreSQL indexes and queries on a hot read path, eliminating sequential scans from OTP configuration lookups.</li>
             </ul>
             <ul class="tags">
-              <li>Java</li><li>Distributed systems</li><li>Microservices</li><li>gRPC</li><li>PostgreSQL</li><li>ClickHouse</li>
+              <li>Java</li><li>Distributed systems</li><li>Microservices</li><li>gRPC</li><li>REST APIs</li><li>Keycloak</li><li>PostgreSQL</li><li>ClickHouse</li>
             </ul>
           </div>
         </article>
@@ -543,7 +545,7 @@
           <ul>
             <li>Java</li><li>Spring / Spring Boot</li><li>Microservices</li>
             <li>gRPC</li><li>REST &amp; API design</li><li>Node.js / Express</li>
-            <li>FastAPI</li><li>Kafka</li><li>Auth &amp; authorization</li>
+            <li>FastAPI</li><li>Kafka</li><li>Keycloak</li><li>Async processing</li><li>Auth &amp; authorization</li>
           </ul>
         </div>
         <div class="stack__group reveal" data-delay="80">
