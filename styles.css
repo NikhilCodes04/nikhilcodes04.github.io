@@ -383,6 +383,10 @@ main { width: 100%; }
    are flows, so their edges run. --dwell is shared with script.js. */
 .viz {
   --dwell: 7s;
+  /* the diagram builds before it runs: edges, then nodes, then motion. Every
+     packet and every node highlight is offset by --lead, so the whole slide
+     stays in sync while nothing appears ahead of the structure it belongs to. */
+  --lead: 0.7s;
   margin: 0 0 0 auto;
   min-width: 0;
   max-width: 470px;     /* keeps the diagram a companion, not the headline */
@@ -547,7 +551,9 @@ main { width: 100%; }
 /* --- ambient: flows keep running, the tree stays still --- */
 .viz__slide.is-active .v-edge--flow path {
   stroke-dasharray: 4 6;
-  animation: vizFlow 1.1s linear infinite;
+  opacity: 0;
+  animation: vizFlow 1.1s linear infinite,
+             vizAppear 0.45s var(--ease) 0.05s forwards;
 }
 @keyframes vizFlow { to { stroke-dashoffset: -20; } }
 
@@ -558,13 +564,16 @@ main { width: 100%; }
 /* Both routes are straight, so these are plain transforms rather than
    offset-path: offset-path silently fails on SVG children in some browsers,
    which dumped the packet at cx/cy 0 in the top-left corner. */
-.v-packet { fill: var(--accent); }
+.v-packet { fill: var(--accent); opacity: 0; }
+@keyframes vizAppear { to { opacity: 1; } }
 
 .viz__slide.is-active .v-packet--authz {
-  animation: vizDrop 5s linear infinite;
+  animation: vizDrop 5s linear var(--lead) infinite,
+             vizAppear 0.4s var(--ease) var(--lead) forwards;
 }
 .viz__slide.is-active .v-packet--llm {
-  animation: vizGlide 5s linear infinite;
+  animation: vizGlide 5s linear var(--lead) infinite,
+             vizAppear 0.4s var(--ease) var(--lead) forwards;
 }
 
 @keyframes vizDrop {          /* request centre 28 down to verdict centre 244 */
@@ -580,9 +589,18 @@ main { width: 100%; }
    feeds land at 50% — the same instant the utterance reaches the LLM — and the
    write-back leaves once the model has answered. Each starts and ends inside an
    opaque node, so it is only visible crossing the gap. */
-.viz__slide.is-active .v-packet--prompt { animation: vizFeedDown 5s linear infinite; }
-.viz__slide.is-active .v-packet--read   { animation: vizFeedUp 5s linear infinite; }
-.viz__slide.is-active .v-packet--save   { animation: vizSave 5s linear infinite; }
+.viz__slide.is-active .v-packet--prompt {
+  animation: vizFeedDown 5s linear var(--lead) infinite,
+             vizAppear 0.4s var(--ease) var(--lead) forwards;
+}
+.viz__slide.is-active .v-packet--read {
+  animation: vizFeedUp 5s linear var(--lead) infinite,
+             vizAppear 0.4s var(--ease) var(--lead) forwards;
+}
+.viz__slide.is-active .v-packet--save {
+  animation: vizSave 5s linear var(--lead) infinite,
+             vizAppear 0.4s var(--ease) var(--lead) forwards;
+}
 
 @keyframes vizFeedDown {      /* prompt + intent drops into the model */
   0%, 34%   { transform: translateY(0); }
@@ -600,7 +618,7 @@ main { width: 100%; }
 /* session state is touched twice per cycle: read, then written */
 .viz__slide.is-active .v-node--rw rect {
   animation: vizHitRW 5s linear infinite;
-  animation-delay: var(--t);
+  animation-delay: calc(var(--t) + var(--lead));
 }
 @keyframes vizHitRW {
   0%, 6%    { stroke: var(--accent); fill: var(--accent-wash); }   /* read  */
@@ -612,7 +630,7 @@ main { width: 100%; }
 /* quiet nodes light up */
 .viz__slide.is-active .v-node--hit rect {
   animation: vizHit 5s linear infinite;
-  animation-delay: var(--t);
+  animation-delay: calc(var(--t) + var(--lead));
 }
 @keyframes vizHit {
   0%, 7%    { stroke: var(--accent); fill: var(--accent-wash); }
@@ -622,7 +640,7 @@ main { width: 100%; }
 /* nodes already carrying the accent thicken instead, so they stay legible */
 .viz__slide.is-active .v-node--pulse rect {
   animation: vizPulse 5s linear infinite;
-  animation-delay: var(--t);
+  animation-delay: calc(var(--t) + var(--lead));
 }
 @keyframes vizPulse {
   0%, 6%    { stroke-width: 2.6; }
