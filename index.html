@@ -189,8 +189,15 @@
                 <path d="M232 109 H244" /><path d="M310 109 H322" />
                 <path d="M194 60 V92" /><path d="M194 126 V186" />
               </g>
-              <!-- one utterance making the round trip -->
+              <!-- One utterance making the round trip, plus the side traffic
+                   the model needs: the prompt drops in and prior turns are read
+                   up, both landing as the utterance arrives; the answered turn
+                   is written back after. Smaller radius marks them as feeds
+                   rather than the request itself. -->
               <circle class="v-packet v-packet--llm" cx="35" cy="109" r="5" />
+              <circle class="v-packet v-packet--prompt" cx="194" cy="44" r="4" />
+              <circle class="v-packet v-packet--read" cx="194" cy="202" r="4" />
+              <circle class="v-packet v-packet--save" cx="194" cy="109" r="4" />
 
               <g class="v-node v-node--hit" style="--i:0; --t:0s">
                 <rect x="4" y="92" width="62" height="34" rx="7" /><text x="35" y="113">voice</text>
@@ -211,7 +218,8 @@
               <g class="v-node v-node--hit" style="--i:5; --t:2.5s">
                 <rect x="130" y="28" width="128" height="32" rx="7" /><text x="194" y="48">prompt + intent</text>
               </g>
-              <g class="v-node v-node--hit" style="--i:6; --t:2.5s">
+              <!-- lights twice: once when read, again when the turn is saved -->
+              <g class="v-node v-node--rw" style="--i:6; --t:2.5s">
                 <rect x="140" y="186" width="108" height="32" rx="7" /><text x="194" y="206">session state</text>
               </g>
               <text class="v-tag" x="194" y="242">Firestore keeps the thread across days</text>

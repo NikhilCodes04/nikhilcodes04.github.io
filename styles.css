@@ -576,6 +576,39 @@ main { width: 100%; }
   to   { transform: translateX(318px); }
 }
 
+/* Side traffic around the model. Percentages are of the shared 5s bar, so the
+   feeds land at 50% — the same instant the utterance reaches the LLM — and the
+   write-back leaves once the model has answered. Each starts and ends inside an
+   opaque node, so it is only visible crossing the gap. */
+.viz__slide.is-active .v-packet--prompt { animation: vizFeedDown 5s linear infinite; }
+.viz__slide.is-active .v-packet--read   { animation: vizFeedUp 5s linear infinite; }
+.viz__slide.is-active .v-packet--save   { animation: vizSave 5s linear infinite; }
+
+@keyframes vizFeedDown {      /* prompt + intent drops into the model */
+  0%, 34%   { transform: translateY(0); }
+  50%, 100% { transform: translateY(65px); }
+}
+@keyframes vizFeedUp {        /* prior turns read up out of session state */
+  0%, 34%   { transform: translateY(0); }
+  50%, 100% { transform: translateY(-93px); }
+}
+@keyframes vizSave {          /* the answered turn written back */
+  0%, 54%   { transform: translateY(0); }
+  70%, 100% { transform: translateY(93px); }
+}
+
+/* session state is touched twice per cycle: read, then written */
+.viz__slide.is-active .v-node--rw rect {
+  animation: vizHitRW 5s linear infinite;
+  animation-delay: var(--t);
+}
+@keyframes vizHitRW {
+  0%, 6%    { stroke: var(--accent); fill: var(--accent-wash); }   /* read  */
+  18%       { stroke: var(--line);   fill: var(--bg-elev); }
+  20%, 26%  { stroke: var(--accent); fill: var(--accent-wash); }   /* write */
+  38%, 100% { stroke: var(--line);   fill: var(--bg-elev); }
+}
+
 /* quiet nodes light up */
 .viz__slide.is-active .v-node--hit rect {
   animation: vizHit 5s linear infinite;
