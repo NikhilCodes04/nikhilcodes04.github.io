@@ -1,13 +1,40 @@
-# Portfolio, Nikhil Mittal
+# nikhilcodes04.github.io
 
-Single-page personal site. Plain HTML, CSS and JavaScript. No build step, no npm,
-no framework.
+Personal portfolio for Nikhil Mittal, backend and AI engineer.
 
 **Live:** https://nikhilcodes04.github.io
 
-## Run it
+A single-page static site built with plain HTML, CSS and JavaScript. No
+framework, no build step, no dependencies to install. Roughly 320&nbsp;KB total,
+served straight from GitHub Pages.
 
-Open `index.html` in a browser, or serve it locally:
+---
+
+## Overview
+
+The site borrows its visual language from the engineering work it describes.
+Query plans, syntax trees and service call-graphs are structures a backend
+engineer works with daily, so the page uses them as layout rather than as
+decoration.
+
+**Hero.** A summary printed the way a query plan prints itself, alongside a
+carousel of four systems drawn as diagrams: a boolean query AST, an LLM voice
+pipeline, a database throughput fix, and service-to-service authorization. Each
+diagram runs on a shared five-second cycle, with node highlights timed to a
+packet's actual arrival along its path.
+
+**Experience.** Rendered as a spine with a node per role. It is the one section
+where chronology carries information, so it is the one section drawn as a
+sequence.
+
+**Section labels.** Each label states what a section is (`// newest first`,
+`// open to roles`) rather than numbering sections that are not sequences.
+
+---
+
+## Running locally
+
+Clone and serve. Any static server works:
 
 ```bash
 python -m http.server 8000
@@ -15,102 +42,87 @@ python -m http.server 8000
 npx serve .
 ```
 
-Hard-refresh after editing CSS (`Ctrl+Shift+R`). The stylesheet caches aggressively.
+Then open `http://localhost:8000`. There is nothing to install or compile.
 
-## Files
+When editing `styles.css`, hard-refresh (`Ctrl+Shift+R`) — stylesheets cache
+aggressively.
 
-| Path | What's in it |
-|---|---|
-| `index.html` | All content. This is the file you edit |
-| `styles.css` | Design tokens at the top (`:root`), then section styles |
-| `script.js` | Theme toggle, mobile menu, hero carousel, scroll reveals, active nav |
-| `icons/` | 15 tech logos, stored locally so nothing depends on a CDN |
-| `img/` | Portrait at two sizes plus the social preview image |
-| `Nikhil_Mittal_Resume.pdf` | Linked from the hero and contact section |
+---
 
-## Design
+## Structure
 
-**Type:** Archivo for display and body, IBM Plex Mono for labels, data and captions.
+```
+index.html      All content and markup
+styles.css      Design tokens in :root, then section styles
+script.js       Theme toggle, mobile menu, hero carousel, scroll reveals
+icons/          15 technology logos, stored locally
+img/            Portrait at two densities, plus the social preview image
+```
 
-**Colour:** cool ink (`#0b0d12`) with a single amber accent (`#ffb454`), the colour
-a query planner highlights cost in. Light theme darkens the amber hard to
-`#8a5200` to stay legible on paper. All colour lives in `:root`, so changing the
-accent is three lines.
+### Design tokens
 
-**The idea:** the page borrows its structure from the work. Nikhil rebuilt a
-ClickHouse query engine from flat AND-filters into a nested AST, so trees, plans
-and flows are the visual language rather than decoration.
+Colour, type scale and spacing are CSS custom properties declared once in
+`:root`, with a `[data-theme="light"]` block overriding the palette. Changing
+the accent colour is a two-line edit.
 
-- The hero **plan block** prints his position the way a query plan prints itself.
-- The hero **carousel** draws four real systems: the query AST, the Aayu Mitra
-  voice pipeline, the PostgreSQL throughput fix, and service authorization.
-  Each runs on the same 5s bar, with node highlights timed to the packet's
-  actual arrival along the path.
-- **Experience** is the one section that is genuinely a sequence, so it is the
-  one section drawn as one: a spine with a node per role, only the current
-  role filled.
-- Section labels say what a section *is* (`// newest first`, `// open to roles`)
-  instead of numbering things that are not sequences.
+| Token | Dark | Light |
+|---|---|---|
+| Background | `#0b0d12` | `#f7f7f5` |
+| Foreground | `#e8eaf0` | `#14161b` |
+| Accent | `#ffb454` | `#8a5200` |
 
-## Content order
+Type is [Archivo](https://fonts.google.com/specimen/Archivo) for display and
+body, [IBM Plex Mono](https://fonts.google.com/specimen/IBM+Plex+Mono) for
+labels, data and captions. Sizes use `clamp()` so they scale continuously with
+the viewport instead of stepping at breakpoints.
 
-Sections run **backend, then AI, then frontend**, deliberately:
+---
 
-- **Experience** newest first, which is also backend first.
-- **Work** leads with Aayu Mitra (LLM backend), then Wired (APIs), then
-  30 Days of Code.
-- **Stack** groups: Backend, Databases, AI engineering, Frontend & Tooling,
-  Core CS.
+## Accessibility and performance
 
-Keep that order if you add anything.
+- `prefers-reduced-motion` disables every animation and lands each element on
+  its finished state.
+- Hover styling is scoped to `@media (hover: hover) and (pointer: fine)`, so
+  effects do not stick after a tap on touch devices.
+- The hero carousel is a keyboard-navigable tablist: arrow keys move between
+  diagrams, and focus pauses rotation.
+- Interactive targets are at least 40&nbsp;px; safe-area insets are respected on
+  notched devices.
+- Technology logos are committed to the repository rather than loaded from a
+  CDN, so the page has one external dependency: the Google Fonts stylesheet.
+- Images are served at two densities via `srcset`.
 
-## Accessibility and motion
+---
 
-- Every hover effect is wrapped in `@media (hover: hover)` so nothing sticks
-  after a tap on a touchscreen.
-- `prefers-reduced-motion` disables all animation, hides the travelling packets
-  and lands the portrait on its finished state.
-- Tap targets are 40 to 46px minimum.
-- Notches and home indicators handled via `env(safe-area-inset-*)`.
-- The carousel is a real tablist: arrow keys work, focus pauses rotation.
+## Deployment
 
-## Still to fill in
-
-- **Wired live URL**: the `Live` link is `href="#"`. Point it at the deployment.
-- **Project repos**: the `Source` links go to the GitHub profile root, not the
-  individual repos.
-- **30 Days of Code**: written up from the Microsoft Learn Student Chapter bullet
-  on the resume. Check the year (2023 is a guess).
-- **Resume PDF** still contains a phone number, and it is publicly downloadable
-  from the live site. Swap in a phone-free export if that matters.
-- **RAG, agents, vector search and function calling** appear in Focus and the
-  Stack section but are not on the resume. Worth adding there so the two
-  documents agree.
-
-## Deploy
-
-Static files, so anything works. Currently GitHub Pages:
+GitHub Pages serves `main` from the repository root. Pushing deploys:
 
 ```bash
 git push
 ```
 
-Pages serves `main` at the repo root. `.nojekyll` stops GitHub running the files
+`.nojekyll` tells Pages to serve the files as-is instead of processing them
 through Jekyll.
 
-For Vercel or Netlify instead: connect the repo, no build command, output
-directory `.`.
+The site is portable to any static host. On Vercel or Netlify, connect the
+repository with no build command and `.` as the output directory.
 
-## Notes
+---
 
-- Fonts load from Google Fonts, the only external request. To go fully offline,
-  self-host them and drop the `<link>` tags in `<head>`.
-- Fluid type via `clamp()`, so it scales smoothly instead of snapping at
-  breakpoints.
-- `Profile_Photo.png` is gitignored: it is the 1.3MB source for `img/portrait*.jpg`
-  and the site never loads it. Regenerate the derivatives with:
+## Assets
 
-  ```bash
-  magick Profile_Photo.png -crop 580x725+110+35 +repage -resize 640x800 -quality 82 img/portrait@2x.jpg
-  magick img/portrait@2x.jpg -resize 320x400 -quality 84 img/portrait.jpg
-  ```
+Portrait derivatives are generated from a single source image with ImageMagick:
+
+```bash
+magick source.png -crop 580x725+110+35 +repage -resize 640x800 -quality 82 img/portrait@2x.jpg
+magick img/portrait@2x.jpg -resize 320x400 -quality 84 img/portrait.jpg
+```
+
+---
+
+## Contact
+
+- Email — nikhilmittal2004@gmail.com
+- LinkedIn — [nikhilmittal11](https://linkedin.com/in/nikhilmittal11)
+- GitHub — [NikhilCodes04](https://github.com/NikhilCodes04)
