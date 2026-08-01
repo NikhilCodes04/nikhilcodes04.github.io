@@ -114,9 +114,36 @@
            describing it. Tree = structure, the rest = flow. -->
       <figure class="viz" id="viz">
         <div class="viz__stage">
+          <!-- 1. PostgreSQL: pessimistic locking replaced by sequences -->
+          <div class="viz__slide is-active" role="group" aria-label="Throughput" data-caption="ID generation: sequences and optimistic inserts replaced pessimistic locking, 4&#215; sequential throughput under load">
+            <svg viewBox="0 0 400 268" focusable="false" aria-hidden="true">
+              <text class="v-tag v-tag--left" x="6" y="66">before</text>
+              <text class="v-lane" x="6" y="84">counter table</text>
+              <text class="v-lane" x="6" y="98">+ row lock</text>
+              <g class="v-edge"><path d="M132 92 H384" /></g>
+              <g class="v-gate"><rect x="240" y="76" width="14" height="32" rx="3" /></g>
+              <g class="v-pip v-pip--serial">
+                <circle cx="140" cy="92" r="5" style="--i:0" />
+                <circle cx="140" cy="92" r="5" style="--i:1" />
+                <circle cx="140" cy="92" r="5" style="--i:2" />
+              </g>
 
-          <!-- 1. ClickHouse: flat AND-only filters, rebuilt as a nested AST -->
-          <div class="viz__slide is-active" role="group" aria-label="Query AST" data-caption="ClickHouse query engine: flat ANDs rebuilt as a nested boolean AST, without breaking existing clients">
+              <text class="v-tag v-tag--left v-tag--on" x="6" y="182">after</text>
+              <text class="v-lane" x="6" y="200">sequence</text>
+              <text class="v-lane" x="6" y="214">+ optimistic insert</text>
+              <g class="v-edge"><path d="M132 208 H384" /></g>
+              <g class="v-pip v-pip--parallel">
+                <circle cx="140" cy="208" r="5" style="--i:0" />
+                <circle cx="140" cy="208" r="5" style="--i:1" />
+                <circle cx="140" cy="208" r="5" style="--i:2" />
+                <circle cx="140" cy="208" r="5" style="--i:3" />
+              </g>
+
+              <text class="v-metric" x="384" y="150">4&#215;</text>
+            </svg>
+          </div>
+          <!-- 2. ClickHouse: flat AND-only filters, rebuilt as a nested AST -->
+          <div class="viz__slide" role="group" hidden aria-label="Query AST" data-caption="ClickHouse query engine: flat ANDs rebuilt as a nested boolean AST, without breaking existing clients">
             <svg viewBox="0 0 400 268" focusable="false" aria-hidden="true">
               <g class="v-edge v-edge--draw">
                 <path d="M200 52 V84 H104 V116" />
@@ -154,8 +181,8 @@
             </svg>
           </div>
 
-          <!-- 2. Aayu Mitra: the voice loop -->
-          <div class="viz__slide" role="group" aria-label="LLM voice pipeline" hidden data-caption="Aayu Mitra: LLM orchestrated with speech-to-text and TTS, multilingual prompts with fallback logic">
+          <!-- 3. Aayu Mitra: the voice loop -->
+          <div class="viz__slide" role="group" hidden aria-label="LLM voice pipeline" data-caption="Aayu Mitra: LLM orchestrated with speech-to-text and TTS, multilingual prompts with fallback logic">
             <svg viewBox="0 0 400 268" focusable="false" aria-hidden="true">
               <g class="v-edge v-edge--flow">
                 <path d="M66 109 H78" /><path d="M144 109 H156" />
@@ -191,37 +218,8 @@
             </svg>
           </div>
 
-          <!-- 3. PostgreSQL: pessimistic locking replaced by sequences -->
-          <div class="viz__slide" role="group" aria-label="Throughput" hidden data-caption="ID generation: sequences and optimistic inserts replaced pessimistic locking, 4&#215; sequential throughput under load">
-            <svg viewBox="0 0 400 268" focusable="false" aria-hidden="true">
-              <text class="v-tag v-tag--left" x="6" y="66">before</text>
-              <text class="v-lane" x="6" y="84">counter table</text>
-              <text class="v-lane" x="6" y="98">+ row lock</text>
-              <g class="v-edge"><path d="M132 92 H384" /></g>
-              <g class="v-gate"><rect x="240" y="76" width="14" height="32" rx="3" /></g>
-              <g class="v-pip v-pip--serial">
-                <circle cx="140" cy="92" r="5" style="--i:0" />
-                <circle cx="140" cy="92" r="5" style="--i:1" />
-                <circle cx="140" cy="92" r="5" style="--i:2" />
-              </g>
-
-              <text class="v-tag v-tag--left v-tag--on" x="6" y="182">after</text>
-              <text class="v-lane" x="6" y="200">sequence</text>
-              <text class="v-lane" x="6" y="214">+ optimistic insert</text>
-              <g class="v-edge"><path d="M132 208 H384" /></g>
-              <g class="v-pip v-pip--parallel">
-                <circle cx="140" cy="208" r="5" style="--i:0" />
-                <circle cx="140" cy="208" r="5" style="--i:1" />
-                <circle cx="140" cy="208" r="5" style="--i:2" />
-                <circle cx="140" cy="208" r="5" style="--i:3" />
-              </g>
-
-              <text class="v-metric" x="384" y="150">4&#215;</text>
-            </svg>
-          </div>
-
           <!-- 4. Policy-driven authorization across service boundaries -->
-          <div class="viz__slide" role="group" aria-label="Authorization" hidden data-caption="Policy-driven authorization across microservices: every request clears authentication, policy evaluation and dual approval over gRPC">
+          <div class="viz__slide" role="group" hidden aria-label="Authorization" data-caption="Policy-driven authorization across microservices: every request clears authentication, policy evaluation and dual approval over gRPC">
             <svg viewBox="0 0 400 268" focusable="false" aria-hidden="true">
               <!-- A gauntlet, not a fan: these are sequential checks, so the
                    request descends one straight line and the hops land on an
@@ -265,9 +263,8 @@
         <figcaption class="viz__caption" id="vizCaption"></figcaption>
 
         <div class="viz__tabs" role="tablist" aria-label="Diagrams">
-          <button class="viz__tab is-active" role="tab" aria-selected="true" type="button">query ast</button>
+          <button class="viz__tab is-active" role="tab" aria-selected="true" type="button">throughput</button>          <button class="viz__tab" role="tab" aria-selected="false" type="button">query ast</button>
           <button class="viz__tab" role="tab" aria-selected="false" type="button">llm pipeline</button>
-          <button class="viz__tab" role="tab" aria-selected="false" type="button">throughput</button>
           <button class="viz__tab" role="tab" aria-selected="false" type="button">authorization</button>
         </div>
       </figure>
