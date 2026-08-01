@@ -386,7 +386,9 @@ main { width: 100%; }
   /* the diagram builds before it runs: edges, then nodes, then motion. Every
      packet and every node highlight is offset by --lead, so the whole slide
      stays in sync while nothing appears ahead of the structure it belongs to. */
-  --lead: 0.7s;
+  --enter: 0.08s;       /* when the whole diagram lands */
+  --enter-dur: 0.45s;
+  --lead: 0.62s;        /* motion starts once it has landed */
   margin: 0 0 0 auto;
   min-width: 0;
   max-width: 470px;     /* keeps the diagram a companion, not the headline */
@@ -531,29 +533,38 @@ main { width: 100%; }
   .viz__tab.is-active:hover { color: var(--accent); }
 }
 
-/* --- entrance: replays each time a slide becomes active --- */
-.viz__slide.is-active .v-edge--draw path {
-  stroke-dasharray: 200;
-  stroke-dashoffset: 200;
-  animation: vizDraw 0.85s var(--ease) 0.1s forwards;
-}
+/* --- entrance: replays each time a slide becomes active ---
+   Nodes, edges and labels all arrive on --enter, together. Staggering them
+   made the slide assemble itself in pieces, which read as a loading glitch
+   rather than a build. The diagram is one object, so it lands as one. */
 .viz__slide.is-active .v-node {
   opacity: 0;
-  animation: vizPop 0.45s var(--ease) forwards;
-  animation-delay: calc(0.25s + var(--i) * 0.06s);
+  animation: vizPop var(--enter-dur) var(--ease) var(--enter) forwards;
 }
-@keyframes vizDraw { to { stroke-dashoffset: 0; } }
+.viz__slide.is-active .v-edge path {
+  opacity: 0;
+  animation: vizAppear var(--enter-dur) var(--ease) var(--enter) forwards;
+}
 @keyframes vizPop {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: none; }
 }
+
+/* the tree still draws itself, but starting on the same beat as its nodes */
+.viz__slide.is-active .v-edge--draw path {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: vizDraw 0.8s var(--ease) var(--enter) forwards,
+             vizAppear var(--enter-dur) var(--ease) var(--enter) forwards;
+}
+@keyframes vizDraw { to { stroke-dashoffset: 0; } }
 
 /* --- ambient: flows keep running, the tree stays still --- */
 .viz__slide.is-active .v-edge--flow path {
   stroke-dasharray: 4 6;
   opacity: 0;
   animation: vizFlow 1.1s linear infinite,
-             vizAppear 0.45s var(--ease) 0.05s forwards;
+             vizAppear var(--enter-dur) var(--ease) var(--enter) forwards;
 }
 @keyframes vizFlow { to { stroke-dashoffset: -20; } }
 
@@ -565,6 +576,18 @@ main { width: 100%; }
    offset-path: offset-path silently fails on SVG children in some browsers,
    which dumped the packet at cx/cy 0 in the top-left corner. */
 .v-packet { fill: var(--accent); opacity: 0; }
+
+/* Annotations, lane labels, gates and metrics had no entrance either, so they
+   sat at full strength while the nodes were still arriving. Everything inside
+   a slide now waits for the structure. */
+.viz__slide.is-active .v-tag,
+.viz__slide.is-active .v-side,
+.viz__slide.is-active .v-lane,
+.viz__slide.is-active .v-metric,
+.viz__slide.is-active .v-gate rect {
+  opacity: 0;
+  animation: vizAppear var(--enter-dur) var(--ease) var(--enter) forwards;
+}
 @keyframes vizAppear { to { opacity: 1; } }
 
 .viz__slide.is-active .v-packet--authz {
