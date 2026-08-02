@@ -365,7 +365,9 @@ main { width: 100%; }
   gap: clamp(2rem, 5vw, 4.5rem);
   max-width: 1180px;
   margin-inline: auto;
-  padding: 6.5rem var(--gutter) 3rem;
+  /* the top pad clears the fixed nav; both ends give way on a short laptop
+     screen so the buttons stay above the fold instead of being clipped */
+  padding: clamp(5.5rem, 13vh, 6.5rem) var(--gutter) clamp(2rem, 6vh, 3rem);
   position: relative;
 }
 
@@ -699,15 +701,20 @@ main { width: 100%; }
 
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; min-height: auto; }
-  .viz { margin-top: 1rem; }
+  /* one column now, so the figure centres instead of hugging the right edge */
+  .viz { margin: 1rem auto 0; }
   .viz figcaption { min-height: 0; }
 }
 
+/* One line, always. Two lines made the block tall and narrow, which left the
+   diagram beside it stranded in whitespace and pushed the buttons off a laptop
+   screen. `nowrap` is safe because --step-4 tracks the viewport. */
 .hero__title {
   font-size: var(--step-4);
   font-weight: 700;
-  line-height: 0.86;
+  line-height: 0.9;
   letter-spacing: -0.05em;
+  white-space: nowrap;
 }
 .hero__title .line {
   display: block;
@@ -718,7 +725,6 @@ main { width: 100%; }
   transform: translateY(105%);
   animation: rise 1.05s var(--ease) forwards;
 }
-.hero__title .line:nth-child(2) > span { animation-delay: 0.11s; }
 
 @keyframes rise { to { transform: translateY(0); } }
 
