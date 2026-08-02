@@ -751,28 +751,49 @@ main { width: 100%; }
 }
 
 .plan__row {
+  /* row padding plus half a line box: puts each elbow on its label's midline */
+  --elbow: calc(0.38rem + 0.75em);
+  position: relative;
   display: grid;
   grid-template-columns: 1.25rem 5.5rem minmax(0, 1fr);
   align-items: baseline;
   gap: 0 0.75rem;
-  padding: 0.42rem 0;
-  border-bottom: 1px solid var(--line);
+  padding: 0.38rem 0;
 }
-.plan__row:first-child { border-top: 1px solid var(--line); }
 
-/* the connector column: real tree glyphs, drawn not typed */
+/* The connectors are strokes, not typed characters. A rule under every row
+   said "table" while the glyphs said "tree"; the spine now runs unbroken
+   through the rows and stops at the last elbow, the way a plan prints. */
 .plan__row::before {
-  content: "├";
-  color: var(--fg-faint);
-  font-weight: 400;
+  content: "";
+  position: absolute;
+  left: 0.3rem;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--fg-faint);
 }
-.plan__row:last-child::before { content: "└"; }
+.plan__row:first-child::before { top: var(--elbow); }
+.plan__row:last-child::before { bottom: auto; height: var(--elbow); }
+
+/* the branch into each row, landing on the label's own line */
+.plan__row::after {
+  content: "";
+  position: absolute;
+  left: 0.3rem;
+  top: var(--elbow);
+  width: 0.9rem;
+  height: 1px;
+  background: var(--fg-faint);
+}
 
 .plan dt {
+  grid-column: 2;
   color: var(--accent);
   letter-spacing: 0.02em;
 }
 .plan dd {
+  grid-column: 3;
   margin: 0;
   color: var(--fg-muted);
 }
