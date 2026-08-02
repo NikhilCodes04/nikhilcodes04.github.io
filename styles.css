@@ -228,6 +228,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .menu-btn {
   display: none;
   place-items: center;
+  /* without this the auto rows stretch to fill the circle and the bars sit
+     ~22px apart, so the open state folded into a chevron instead of an X */
+  place-content: center;
   gap: 5px;
   width: 42px; height: 42px;
   border: 1px solid var(--line);
@@ -266,13 +269,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .menu__links {
   display: grid;
-  gap: 0.15rem;
+  gap: 0;              /* rows must touch, or the spine below breaks */
 }
 .menu__links a {
+  position: relative;
   display: flex;
   align-items: baseline;
-  gap: 1rem;
-  padding: 0.55rem 0;
+  gap: 0.55rem;
+  padding: 0.5rem 0;
   font-size: clamp(1.9rem, 9vw, 2.8rem);
   font-weight: 400;
   letter-spacing: -0.035em;
@@ -291,14 +295,32 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 @keyframes menuIn { to { opacity: 1; transform: none; } }
 
-.menu__branch {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  color: var(--fg-faint);
-  line-height: 1;
+/* Same tree as the hero plan, same reasoning: strokes, not typed glyphs. A
+   0.85rem character next to a 2.8rem label reads as a stray mark, and the
+   characters never met, so five branches looked like five loose bullets. */
+.menu__branch { flex: 0 0 0.95rem; }   /* the connector column, drawn below */
+
+.menu__links a::before {               /* spine */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--fg-faint);
 }
-.menu__branch::before { content: "├"; }
-.menu__links a:last-child .menu__branch::before { content: "└"; }
+.menu__links a:first-child::before { top: 50%; }
+.menu__links a:last-child::before { bottom: 50%; }
+
+.menu__links a::after {                /* the branch into the label */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0.95rem;
+  height: 1px;
+  background: var(--fg-faint);
+}
 
 .menu__foot {
   display: flex;
