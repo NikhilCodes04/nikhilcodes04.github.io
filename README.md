@@ -55,7 +55,7 @@ aggressively.
 index.html      All content and markup
 styles.css      Design tokens in :root, then section styles
 script.js       Theme toggle, mobile menu, hero carousel, scroll reveals
-icons/          15 technology logos, stored locally
+icons/          23 technology logos, stored locally
 img/            Portrait at two densities, plus the social preview image
 ```
 
