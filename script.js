@@ -174,7 +174,7 @@
   }
 
   /* ---------- stack icons: fall back to text if one fails ---------- */
-  document.querySelectorAll(".core__item img").forEach((img) => {
+  document.querySelectorAll(".stack__group li img").forEach((img) => {
     img.addEventListener("error", () => { img.dataset.failed = "true"; });
   });
 

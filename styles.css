@@ -1196,62 +1196,17 @@ main { width: 100%; }
   .project::before { inset: 0 calc(var(--gutter) * -0.4); }
 }
 
-/* ---------- stack: core logo tiles ---------- */
-.core {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem;
-  margin-bottom: clamp(2.5rem, 6vh, 4rem);
-}
-
-.core__item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.6rem 1rem 0.6rem 0.75rem;
-  border: 1px solid var(--line);
-  border-radius: 100px;
-  background: var(--bg-elev);
-  font-size: var(--step--1);
-  white-space: nowrap;
-  color: var(--fg-muted);
-  transition: border-color 0.35s var(--ease), color 0.35s var(--ease),
-              transform 0.4s var(--ease);
-}
-
-.core__item img {
-  flex: 0 0 auto;
-  width: 22px;
-  height: 22px;
-  object-fit: contain;
-}
-
-/* if the icon fails to load, the tile still reads as a labelled chip */
-.core__item img[data-failed] { display: none; }
-
-@media (hover: hover) and (pointer: fine) {
-  .core__item:hover {
-    color: var(--fg);
-    border-color: var(--fg-faint);
-    transform: translateY(-3px);
-  }
-}
-
-@media (max-width: 480px) {
-  .core { gap: 0.45rem; }
-  .core__item {
-    gap: 0.5rem;
-    padding: 0.5rem 0.8rem 0.5rem 0.6rem;
-    font-size: 0.75rem;
-  }
-  .core__item img { width: 19px; height: 19px; }
-}
-
-/* ---------- stack: detail lists ---------- */
+/* ---------- stack ---------- */
+/* Three columns, so five groups leave one empty cell rather than a
+   two-cell void. The chips wrap inside a column, so the column no longer
+   needs to be wide enough for the longest single label. */
 .stack {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: clamp(1.5rem, 4vw, 3.5rem);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.75rem, 3.5vw, 3rem);
+}
+@media (max-width: 900px) {
+  .stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 .stack__group h3 {
   font-family: var(--font-mono);
@@ -1264,36 +1219,53 @@ main { width: 100%; }
   margin-bottom: 1rem;
   border-bottom: 1px solid var(--line);
 }
-.stack__group ul { display: grid; gap: 0.55rem; }
+/* chips size to their own label, so a group reads as one wrapped run
+   rather than a column of stretched rows */
+.stack__group ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
 
-/* AI carries the most entries, so it gets the room to stay two columns */
-.stack__group--wide { grid-column: span 2; }
-.stack__group--wide ul {
-  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
-  gap: 0.55rem 1.5rem;
-}
-@media (max-width: 900px) {
-  .stack__group--wide { grid-column: span 1; }
-}
 .stack__group li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.42rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  background: var(--bg-elev);
+  font-size: var(--step--1);
   color: var(--fg-muted);
-  transition: color 0.25s var(--ease), transform 0.35s var(--ease);
+  transition: border-color 0.35s var(--ease), color 0.35s var(--ease),
+              transform 0.4s var(--ease);
 }
+/* a logo needs its own breathing room; a bare label does not */
+.stack__group li:has(img) { padding-left: 0.6rem; }
+
+.stack__group li img {
+  flex: 0 0 auto;
+  width: 19px;
+  height: 19px;
+  object-fit: contain;
+}
+
+/* if the icon fails to load, the chip still reads as a labelled chip */
+.stack__group li img[data-failed] { display: none; }
 
 @media (hover: hover) and (pointer: fine) {
   .stack__group li:hover {
     color: var(--fg);
-    transform: translateX(4px);
+    border-color: var(--fg-faint);
+    transform: translateY(-3px);
   }
 }
 
-/* two tidy columns on phones instead of one very long list */
 @media (max-width: 620px) {
   .stack { gap: 2rem 1.5rem; grid-template-columns: 1fr; }
-  .stack__group ul {
-    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
-    gap: 0.5rem 1rem;
-  }
+  .stack__group ul { gap: 0.4rem; }
+  .stack__group li { padding: 0.38rem 0.7rem; font-size: 0.75rem; }
+  .stack__group li img { width: 17px; height: 17px; }
 }
 
 /* ---------- contact ---------- */

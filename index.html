@@ -526,45 +526,45 @@
         <h2 class="section__title">Stack</h2>
       </div>
 
-      <ul class="core reveal">
-        <li class="core__item"><img src="icons/java.svg" alt="" width="26" height="26" /><span>Java</span></li>
-        <li class="core__item"><img src="icons/spring.svg" alt="" width="26" height="26" /><span>Spring Boot</span></li>
-        <li class="core__item"><img src="icons/postgresql.svg" alt="" width="26" height="26" /><span>PostgreSQL</span></li>
-        <li class="core__item"><img src="icons/clickhouse.svg" alt="" width="26" height="26" /><span>ClickHouse</span></li>
-        <li class="core__item"><img src="icons/kafka.svg" alt="" width="26" height="26" /><span>Kafka</span></li>
-        <li class="core__item"><img src="icons/redis.svg" alt="" width="26" height="26" /><span>Redis</span></li>
-        <li class="core__item"><img src="icons/mongodb.svg" alt="" width="26" height="26" /><span>MongoDB</span></li>
-        <li class="core__item"><img src="icons/python.svg" alt="" width="26" height="26" /><span>Python</span></li>
-        <li class="core__item"><img src="icons/openai.svg" alt="" width="26" height="26" /><span>OpenAI</span></li>
-        <li class="core__item"><img src="icons/kubernetes.svg" alt="" width="26" height="26" /><span>Kubernetes</span></li>
-        <li class="core__item"><img src="icons/docker.svg" alt="" width="26" height="26" /><span>Docker</span></li>
-        <li class="core__item"><img src="icons/nodejs.svg" alt="" width="26" height="26" /><span>Node.js</span></li>
-        <li class="core__item"><img src="icons/typescript.svg" alt="" width="26" height="26" /><span>TypeScript</span></li>
-        <li class="core__item"><img src="icons/react.svg" alt="" width="26" height="26" /><span>React</span></li>
-      </ul>
-
+      <!-- One list, not two. A logo row above these groups repeated every
+           name in them, so the section said everything twice. The logos moved
+           onto the entries that have one; the rest carry their own weight. -->
       <div class="stack">
         <div class="stack__group reveal">
           <h3>Backend</h3>
           <ul>
-            <li>Java</li><li>Spring / Spring Boot</li><li>Microservices</li>
-            <li>gRPC</li><li>REST &amp; API design</li><li>Node.js / Express</li>
-            <li>FastAPI</li><li>Kafka</li><li>Keycloak</li><li>Async processing</li><li>Auth &amp; authorization</li>
+            <li><img src="icons/java.svg" alt="" width="26" height="26" />Java</li>
+            <li><img src="icons/spring.svg" alt="" width="26" height="26" />Spring Boot</li>
+            <li><img src="icons/kafka.svg" alt="" width="26" height="26" />Kafka</li>
+            <li><img src="icons/nodejs.svg" alt="" width="26" height="26" />Node.js / Express</li>
+            <li><img src="icons/fastapi.svg" alt="" width="26" height="26" />FastAPI</li>
+            <li><img src="icons/keycloak.svg" alt="" width="26" height="26" />Keycloak</li>
+            <!-- gRPC has no legible mark at this size: the only logo shipped
+                 for it is a wordmark that repeats the label and disappears on
+                 a light background, so it stays a text chip -->
+            <li>gRPC</li><li>Microservices</li><li>REST &amp; API design</li>
+            <li>Async processing</li><li>Auth &amp; authorization</li>
           </ul>
         </div>
         <div class="stack__group reveal" data-delay="80">
           <h3>Databases</h3>
           <ul>
-            <li>PostgreSQL</li><li>ClickHouse</li><li>MongoDB</li>
-            <li>Redis</li><li>MySQL</li><li>Firestore</li>
+            <li><img src="icons/postgresql.svg" alt="" width="26" height="26" />PostgreSQL</li>
+            <li><img src="icons/clickhouse.svg" alt="" width="26" height="26" />ClickHouse</li>
+            <li><img src="icons/mongodb.svg" alt="" width="26" height="26" />MongoDB</li>
+            <li><img src="icons/redis.svg" alt="" width="26" height="26" />Redis</li>
+            <li><img src="icons/mysql.svg" alt="" width="26" height="26" />MySQL</li>
+            <li><img src="icons/firebase.svg" alt="" width="26" height="26" />Firestore</li>
           </ul>
         </div>
-        <div class="stack__group stack__group--wide reveal" data-delay="160">
+        <div class="stack__group reveal" data-delay="160">
           <h3>AI engineering</h3>
           <ul>
-            <li>LLM orchestration</li><li>RAG pipelines</li><li>Agent workflows</li>
-            <li>Prompt engineering</li><li>Tool use &amp; function calling</li>
-            <li>Embeddings &amp; vector search</li><li>OpenAI API</li>
+            <li><img src="icons/python.svg" alt="" width="26" height="26" />Python</li>
+            <li><img src="icons/langchain.svg" alt="" width="26" height="26" />LangChain</li>
+            <li>Agent workflows</li><li>RAG pipelines</li><li>LLM orchestration</li>
+            <li>Tool use &amp; function calling</li>
+            <li>Embeddings &amp; vector search</li><li>Prompt engineering</li>
             <li>Inference pipelines</li><li>Structured output parsing</li>
             <li>Context &amp; session state</li><li>Multilingual prompting</li>
             <li>STT / TTS pipelines</li><li>Fallback &amp; reliability logic</li>
@@ -574,16 +574,22 @@
         <div class="stack__group reveal" data-delay="240">
           <h3>Frontend &amp; Tooling</h3>
           <ul>
-            <li>React</li><li>TypeScript</li><li>JavaScript</li>
-            <li>Docker</li><li>Kubernetes</li><li>Git</li><li>Azure DevOps</li>
-            <li>Postman / ghz</li>
+            <li><img src="icons/react.svg" alt="" width="26" height="26" />React</li>
+            <li><img src="icons/typescript.svg" alt="" width="26" height="26" />TypeScript</li>
+            <li><img src="icons/javascript.svg" alt="" width="26" height="26" />JavaScript</li>
+            <li><img src="icons/docker.svg" alt="" width="26" height="26" />Docker</li>
+            <li><img src="icons/kubernetes.svg" alt="" width="26" height="26" />Kubernetes</li>
+            <li><img src="icons/git.svg" alt="" width="26" height="26" />Git</li>
+            <li><img src="icons/azuredevops.svg" alt="" width="26" height="26" />Azure DevOps</li>
+            <li><img src="icons/postman.svg" alt="" width="26" height="26" />Postman / ghz</li>
           </ul>
         </div>
         <div class="stack__group reveal" data-delay="320">
           <h3>Core CS</h3>
           <ul>
+            <li><img src="icons/cplusplus.svg" alt="" width="26" height="26" />C++</li>
             <li>Data Structures &amp; Algorithms</li><li>DBMS</li><li>Operating Systems</li>
-            <li>Computer Networks</li><li>OOP</li><li>SQL</li><li>C++</li>
+            <li>Computer Networks</li><li>OOP</li><li>SQL</li>
           </ul>
         </div>
       </div>
