@@ -26,8 +26,29 @@
   const menuBtn = document.getElementById("menuBtn");
   const menu = document.getElementById("mobileMenu");
 
+  // Opening waits two frames, closing waits for a transition, so both outlive
+  // the tap that started them. Reading the state back off the DOM meant a tap
+  // during either window resolved against the state it was replacing: a
+  // pending close hid a menu that had just been reopened (button stuck on the
+  // X, menu gone), and a pending open re-showed one that had just closed.
+  // One variable owns the state, and every state change cancels what the
+  // previous one left in flight.
+  let menuOpen = false;
+  let openFrame = null;
+  let closeDone = null;
+  let closeTimer = null;
+
+  const settle = () => {
+    if (openFrame !== null) cancelAnimationFrame(openFrame);
+    if (closeDone) menu.removeEventListener("transitionend", closeDone);
+    clearTimeout(closeTimer);
+    openFrame = closeDone = closeTimer = null;
+  };
+
   const setMenu = (open) => {
-    if (!menu || !menuBtn) return;
+    if (!menu || !menuBtn || open === menuOpen) return;
+    menuOpen = open;
+    settle();
 
     menuBtn.setAttribute("aria-expanded", String(open));
     menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
@@ -37,27 +58,35 @@
       menu.hidden = false;
       // two frames: the first commits display, the second gives the
       // opacity transition a starting value to animate from
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => menu.classList.add("is-open"))
-      );
-    } else {
-      menu.classList.remove("is-open");
-      if (prefersReduced) {
-        menu.hidden = true;
-      } else {
-        const done = (e) => {
-          if (e.target !== menu) return; // ignore transitions bubbling from children
-          menu.hidden = true;
-          menu.removeEventListener("transitionend", done);
-        };
-        menu.addEventListener("transitionend", done);
-      }
+      openFrame = requestAnimationFrame(() => {
+        openFrame = requestAnimationFrame(() => {
+          openFrame = null;
+          menu.classList.add("is-open");
+        });
+      });
+      return;
     }
+
+    menu.classList.remove("is-open");
+
+    if (prefersReduced) {
+      menu.hidden = true;
+      return;
+    }
+
+    closeDone = (e) => {
+      if (e && e.target !== menu) return; // ignore transitions bubbling from children
+      settle();
+      menu.hidden = true;
+    };
+    menu.addEventListener("transitionend", closeDone);
+    // Closing before the menu ever faded in leaves nothing to transition, and
+    // an interrupted fade reports transitioncancel instead. Either way no
+    // transitionend arrives, and an unhidden overlay covers the whole page.
+    closeTimer = setTimeout(closeDone, 500);
   };
 
-  menuBtn?.addEventListener("click", () => {
-    setMenu(menuBtn.getAttribute("aria-expanded") !== "true");
-  });
+  menuBtn?.addEventListener("click", () => setMenu(!menuOpen));
 
   // close on link tap, and let the browser handle the anchor jump
   menu?.querySelectorAll("a").forEach((a) => {
@@ -65,7 +94,7 @@
   });
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && menuBtn?.getAttribute("aria-expanded") === "true") {
+    if (e.key === "Escape" && menuOpen) {
       setMenu(false);
       menuBtn.focus();
     }
